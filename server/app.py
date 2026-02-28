@@ -4,6 +4,6 @@ app=Flask(__name__)
 CORS(app)
 @app.route('/')
 def home():
-    return jsonify(message="Welcome to Tharun Railways!")
+    return jsonify(message="Welcome to fintrack!")
 if __name__=="__main__":
     app.run(debug=True,port=5000)
