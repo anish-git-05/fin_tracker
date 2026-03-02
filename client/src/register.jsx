@@ -1,35 +1,35 @@
 import { useState } from "react";
-
+import axios from 'axios';
+// import './Auth.css';
 function Register(){
-  const [data,setData]=useState({
-    name:"",
-    password:""
-  });
-  const handleSubmit=async (e)=>{
+  const [email, setEmail] = useState('');
+  const [username,setUsername]=useState('');
+  const [password,setPassword]=useState('');
+  const [message,setmessage]=useState('');
+  const handleRegister=async(e)=>{
     e.preventDefault();
     try{
-      const response=await fetch("http://localhost:5000/register",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify(data)
-      })
-      const resData=await response.json();
-      console.log(resData);
-    }catch(error){
-      console.error("Error:",error);
+      const response=await axios.post('http://localhost:5000/register',{
+        email,username,password
+      });
+      setmessage(response.data.message);
+    }
+    catch(error){
+      setmessage(error.response?.data?.message ||'Error');
     }
   }
-  return(
-    <div className="regDetails">
-      <h3>Register</h3>
-      <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Name" value={data.name} onChange={(e)=>setData({...data,name:e.target.value})}></input>
-        <input type="password" placeholder="Create password" value={data.password} onChange={(e)=>setData({...data,password:e.target.value})}></input>
-        <button type="submit">Submit</button>
-      </form>
+  return <div className="auth-container">
+    <div className="auth-card">
+        {/* <h2>Register</h2> */}
+        <form onSubmit={handleRegister}>
+          <input type="text" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
+          <input type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required />
+          <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+          <button type="submit">Sign up</button>
+        </form>
     </div>
-  )
+    
+    {message && <p>{message}</p>}
+  </div>
 }
 export default Register;

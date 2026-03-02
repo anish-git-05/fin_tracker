@@ -1,10 +1,10 @@
 import Register from "./register";
-import Navbar from "./home";
+import Login from "./login";
 function App() {
   return (
     <div>
-      <Navbar/>
       <Register />
+      <Login />
     </div>
   );
 }

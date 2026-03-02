@@ -1,40 +1,36 @@
 import { useState } from "react";
-
+import axios from 'axios';
+// import './Auth.css';
 function Login(){
-    const [data,setData]=useState({
-        name:"",
-        password:""
-    })
-    const handleSubmit=async(e)=>{
+    const [email, setEmail] = useState('');
+    const [password,setPassword]=useState('');
+    const [message,setmessage]=useState('');
+   
+    const handleLogin=async(e)=>{
         e.preventDefault()
         try{
-            const response=await fetch("http://localhost:5000/login",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify(data)
-            })
+            const response=await axios.post("http://localhost:5000/login",{
+                email,password
+            });
+            setmessage(response.data.message);
+            if(response.data.access_token){
+                localStorage.setItem('token',response.data.access_token)
+            }
         }catch(error){
-            console.log("Error in login",error);
+            setmessage(error.response?.data?.message ||'Error');
         }
-        const responseData=await response.json();
-        console.log(responseData);
     }
-    const handleInput=(e)=>{
-        const{name,value}=e.target;
-        setData((prevData)=>({
-            ...prevData,
-            [name]:value
-        }));
-    };
     return(
-        <div className="login">
-            <form onSubmit={handleSubmit}>
-                <input type="text" placeholder="Username" name="name" value={data.name} onChange={handleInput}></input>
-                <input type="text" placeholder="Username" name="password" value={data.password} onChange={handleInput}></input>
-                <button type="submit">Submit</button>
-            </form>
+        <div className="auth-container">
+            <div className="auth-card">
+                <form onSubmit={handleLogin}>
+                    <input type="text" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
+                    <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+                    <button type="submit">Login</button>
+                </form>
+                {message && <p>{message}</p>}
+            </div>
+            
         </div>
     )
 }
