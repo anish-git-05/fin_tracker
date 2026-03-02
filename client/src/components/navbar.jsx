@@ -1,10 +1,8 @@
-import {useState} from "react"
-
 function Navbar(){
     return(
         <nav className="navbar">
-            <div id="home">
-                Home
+            <div id="navLeft">
+                <a href="/home">Home</a>
             </div>
             <div id="navRight">
                 <a href="/dashboard">Dashboard</a>
@@ -17,12 +15,13 @@ function Navbar(){
 function Sidebar(){
     return(
         <nav className="sidebar">
-            <div>
-                <a href="/visual">Expenditure visualization</a>
-            </div>
+                <a href="/visual">Visualisation</a>
+                <a href="/predict">Expense predictor</a>
+                <a href="rank">Your rankings</a>
+                <a href="/about">About FinTrack</a>
         </nav>
     );
 }
 
-export default Navbar;
-export default Sidebar;
+export {Navbar};
+export {Sidebar};
