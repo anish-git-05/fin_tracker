@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from 'axios';
 // import './Auth.css';
 function Register(){
   const [email, setEmail] = useState('');
@@ -9,14 +8,25 @@ function Register(){
   const handleRegister=async(e)=>{
     e.preventDefault();
     try{
-      const response=await axios.post('http://localhost:5000/register',{
-        email,username,password
+      const response=await fetch('http://localhost:5000/register',{
+        method:"POST",
+        headers:{
+          "content-type":"application/json"
+        },
+        body:JSON.stringify({email,username,password})
       });
-      setmessage(response.data.message);
-    }
-    catch(error){
-      setmessage(error.response?.data?.message ||'Error');
-    }
+      const data=await response.json();
+            if(!response.ok){
+                setmessage(data.message || "Register failed");
+                return;
+            }
+            setmessage(data.message);
+            if(data.access_token){
+                localStorage.setItem('token',data.access_token)
+            }
+        }catch(error){
+            setmessage("Network error");
+        } 
   }
   return <div className="auth-container">
     <div className="auth-card">

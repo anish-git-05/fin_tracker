@@ -1,5 +1,5 @@
 import Register from "./register";
-import Login from "./login";
+import Login from "./Loginpath";
 function App() {
   return (
     <div>

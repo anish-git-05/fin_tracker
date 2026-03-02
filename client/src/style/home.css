@@ -4,12 +4,6 @@
     background-color: #1D2942;
     min-height: 100vh;
 }
-.navbar{
-    padding:4px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
 .home_content{
     display: flex;
     flex:1;

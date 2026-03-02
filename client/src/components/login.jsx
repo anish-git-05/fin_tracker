@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from 'axios';
 // import './Auth.css';
 function Login(){
     const [email, setEmail] = useState('');
@@ -9,15 +8,24 @@ function Login(){
     const handleLogin=async(e)=>{
         e.preventDefault()
         try{
-            const response=await axios.post("http://localhost:5000/login",{
-                email,password
+            const response=await fetch("http://localhost:5000/login",{
+                method:"POST",
+                headers:{
+                    "content-type":"application/json"
+                },
+                body:JSON.stringify({email,password})
             });
-            setmessage(response.data.message);
-            if(response.data.access_token){
-                localStorage.setItem('token',response.data.access_token)
+            const data=await response.json();
+            if(!response.ok){
+                setmessage(data.message || "Login failed");
+                return;
+            }
+            setmessage(data.message);
+            if(data.access_token){
+                localStorage.setItem('token',data.access_token)
             }
         }catch(error){
-            setmessage(error.response?.data?.message ||'Error');
+            setmessage("Network error");
         }
     }
     return(
