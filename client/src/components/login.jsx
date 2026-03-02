@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
 // import './Auth.css';
-function Login(){
+function Login({setModel,onSuccess,setlogin}){
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
     const [message,setmessage]=useState('');
@@ -15,6 +15,7 @@ function Login(){
             setmessage(response.data.message);
             if(response.data.access_token){
                 localStorage.setItem('token',response.data.access_token)
+                setlogin(true);
             }
         }catch(error){
             setmessage(error.response?.data?.message ||'Error');

@@ -1,12 +1,35 @@
-function Navbar(){
+
+
+function Navbar({setModel,login,setlogin}){
+    
+    
+    const handlelogout=()=>{
+        localStorage.removeItem('token');
+        setlogin(false);
+        window.location.href="/";
+    };
+
+
     return(
         <nav className="navbar">
             <div id="navLeft">
                 <a href="/home">Home</a>
             </div>
             <div id="navRight">
-                <a href="/dashboard">Dashboard</a>
-                <a href="/profile">Profile</a>
+                {
+                    login?(<>
+                            <a href="/dashboard">Dashboard</a>
+                            <a href="/profile">Profile</a>
+                            <a href="/logout" onClick={handlelogout}>Logout</a>
+                        </>
+                    ):(
+                        <>
+                            <a href="#" onClick={(e)=>{e.preventDefault();setModel('login')}}>Login</a>
+                            <a href="#" onClick={(e)=>{e.preventDefault();setModel('register')}}>Register</a>
+                        </>
+                    )
+                }
+                
             </div>
         </nav>
     )

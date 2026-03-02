@@ -60,3 +60,133 @@
     flex-direction: column;
     flex:1;
 }
+
+
+/* The dark background overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; 
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75); /* Slightly darker for a dark theme */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; 
+    backdrop-filter: blur(3px); /* Adds a modern blurred glass effect behind the modal */
+}
+
+/* The Pop-out Card - Dark Theme */
+.modal-card {
+    background-color: #141B2B; /* Matches your sidebar background */
+    padding: 35px 30px;
+    border-radius: 12px;
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    box-sizing: border-box; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1); /* Deep shadow with subtle rim light */
+    color: white; /* General text color */
+    
+    /* The "Bulging" Animation */
+    animation: bulgeOut 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Gives it a slight "spring" effect */
+}
+
+/* Modal Heading matching your Home Page text_box */
+.modal-card h2 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bolder;
+    color: white;
+    font-size: 32px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* Styling the inputs to fit the dark theme */
+.modal-card input {
+    background-color: #1D2942; /* Matches your main home_page background */
+    color: white;
+    border: 1px solid #2A3A5A; /* Subtle lighter border */
+    padding: 12px 15px;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.modal-card input::placeholder {
+    color: #8892b0; /* Dimmed placeholder text */
+}
+
+.modal-card input:focus {
+    border-color: #61dafb; /* A nice bright blue accent for focus */
+}
+
+/* Submit Button */
+.modal-card button[type="submit"] {
+    background-color: #2855b5; /* Professional finance blue */
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.modal-card button[type="submit"]:hover {
+    background-color: #1d408f;
+}
+
+.modal-card button[type="submit"]:active {
+    transform: scale(0.98); /* Satisfying click effect */
+}
+
+/* The 'X' Close Button */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #8892b0;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: white;
+}
+
+/* The bottom toggle text (Login/Sign up) */
+.toggle-text {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #8892b0;
+}
+
+.toggle-text a {
+    color: #61dafb;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.toggle-text a:hover {
+    text-decoration: underline;
+}
+
+/* The Keyframes */
+@keyframes bulgeOut {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}

@@ -1,12 +1,23 @@
 import Register from "./register";
+import Login from "./login";
 import {Image} from "./home";
 import {Navbar} from "./navbar";
 import { Sidebar } from "./navbar";
 import "../style/home.css";
+import { useState,useEffect} from "react";
 function App() {
+  const [model,setmodel]=useState(null);
+  const [login,setlogin]=useState(false);
+  useEffect(()=>{
+        const token=localStorage.getItem('token');
+        if(token)setlogin(true);
+
+    },[]);
+
+  const close=()=>setmodel(null);
   return (
     <div className="home_page">
-      <Navbar/>
+      <Navbar setModel={setmodel} login={login} setlogin={setlogin}/>
       <div className="home_content">
         <Sidebar/>
         <div className="main_area">
@@ -17,6 +28,23 @@ function App() {
           </div>
         </div>
       </div>
+    {
+      model &&(
+        <div className="modal-overlay" onClick={close}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={close}>&times;</button>
+            
+              {model==='login' &&(
+                <Login setModel={setmodel} onSuccess={close} setlogin={setlogin}/>
+              )}
+              {model==='register' &&(
+                <Register setModel={setmodel} onSuccess={close}/>
+              )}
+    
+          </div>
+        </div>
+      )
+    }
     </div>
   );
 }
