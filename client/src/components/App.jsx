@@ -35,10 +35,10 @@ function App() {
             <button className="close-btn" onClick={close}>&times;</button>
             
               {model==='login' &&(
-                <Login setModel={setmodel} onSuccess={close} setlogin={setlogin}/>
+                <Login onSuccess={close} setlogin={setlogin}/>
               )}
               {model==='register' &&(
-                <Register setModel={setmodel} onSuccess={close}/>
+                <Register onSuccess={close}/>
               )}
     
           </div>

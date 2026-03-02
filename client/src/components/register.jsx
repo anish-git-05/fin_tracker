@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
 // import './Auth.css';
-function Register(){
+function Register({onSuccess}){
   const [email, setEmail] = useState('');
   const [username,setUsername]=useState('');
   const [password,setPassword]=useState('');
@@ -13,6 +13,7 @@ function Register(){
         email,username,password
       });
       setmessage(response.data.message);
+      onSuccess();
     }
     catch(error){
       setmessage(error.response?.data?.message ||'Error');
