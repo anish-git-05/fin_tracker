@@ -1,6 +1,6 @@
 import { useState } from "react";
-// import './Auth.css';
-function Login(){
+import "../style/login.css"
+function Login({onSuccess,setlogin}){
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
     const [message,setmessage]=useState('');
