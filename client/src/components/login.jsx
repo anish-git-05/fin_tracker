@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../style/login.css"
-function Login({onSuccess,setlogin}){
+function Login(){
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
     const [message,setmessage]=useState('');
@@ -32,8 +32,9 @@ function Login({onSuccess,setlogin}){
         <div className="auth-container">
             <div className="auth-card">
                 <form onSubmit={handleLogin}>
+                    <h2>Login</h2>
                     <input type="text" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
-                    <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+                    <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
                     <button type="submit">Login</button>
                 </form>
                 {message && <p>{message}</p>}
