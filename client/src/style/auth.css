@@ -11,13 +11,13 @@ form{
     background-color:silver;
     display: flex;
     flex-direction: column;
-    padding: 12vh;
+    padding: 6vh;
     box-shadow: 5px 3px 5px rgba(0,0,0,0.3);
 }
 
 input{
     margin:12px;
-    box-shadow: 1px 1px 4px black
+    box-shadow: 1px 1px 2px rgb(24, 23, 23)
 }
 button{
     margin:12px;
@@ -25,4 +25,5 @@ button{
     color:white;
     border:none;
     padding:4px;
+    box-shadow: 1px 1px 2px rgb(24, 23, 23)
 }

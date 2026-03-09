@@ -41,7 +41,7 @@ def login():
     password=data.get('password')
     u=User.query.filter_by(email=email).first()
     if u and check_password_hash(u.hp,password):
-        return jsonify({'message':'Login successful','access_token':create_access_token(identity=u.email)}), 200
+        return jsonify({'message':'Login successful','access_token':create_access_token(identity=u.id)}), 200
     return jsonify({'message': 'Invalid credentials'}), 401
 
 @app.route('/protected',methods=['GET'])

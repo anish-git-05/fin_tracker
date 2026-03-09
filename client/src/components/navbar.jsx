@@ -18,10 +18,10 @@ function Navbar(){
 function Sidebar(){
     return(
         <nav className="sidebar">
-                <a href="/visual">Visualisation</a>
-                <a href="/predict">Expense predictor</a>
-                <a href="rank">Your rankings</a>
-                <a href="/about">About FinTrack</a>
+                <Link to="/visual">Visualisation</Link>
+                <Link to="/predict">Expense predictor</Link>
+                <Link to="/rank">Your rankings</Link>
+                <Link to="/about">About FinTrack</Link>
         </nav>
     );
 }

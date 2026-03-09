@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../style/login.css"
+import "../style/auth.css"
 function Login({onSuccess,setlogin}){
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
