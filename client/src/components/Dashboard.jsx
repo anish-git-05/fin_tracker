@@ -1,6 +1,6 @@
 import {useState,useEffect} from "react";
 import "../style/Dashboard.css";
-
+import {API_URL} from "./api.js";
 function authfetch(url){
     const token=localStorage.getItem("token");
     return fetch(url,{
