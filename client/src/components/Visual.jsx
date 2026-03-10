@@ -13,7 +13,7 @@ import{
 import{Line,Bar,Pie} from "react-chartjs-2";
 import { useState,useEffect } from "react";
 import "../style/Visual.css";
-import {API_URL} from "..api.js";
+import {API_URL} from "../api.js";
 ChartJS.register(
     CategoryScale,
     LinearScale,
