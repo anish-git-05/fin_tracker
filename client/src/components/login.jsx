@@ -32,8 +32,9 @@ function Login(){
         <div className="auth-container">
             <div className="auth-card">
                 <form onSubmit={handleLogin}>
+                    <h2 style={{color:"white"}}>Login</h2>
                     <input type="text" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
-                    <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+                    <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
                     <button type="submit">Login</button>
                 </form>
                 {message && <p>{message}</p>}
