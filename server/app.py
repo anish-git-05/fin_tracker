@@ -11,13 +11,12 @@ load_dotenv()
 print(f"DEBUG: Password found is -> {os.getenv('DB_password')}")
 app=Flask(__name__)
 CORS(app)
-app.config['JWT_SECRET_KEY']='your-super-secret-jwt-key' 
+app.config['JWT_SECRET_KEY']=os.getenv('JWT_SECRET_KEY')
 jwt=JWTManager(app)
 
 
 def db():
-    return psycopg2.connect(host="localhost",database="fintrack",user="postgres",password=os.getenv('DB_password'))
-
+   return psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
 #_____________________________________________________________________________________________________________________________________#
@@ -364,7 +363,8 @@ def summary():
 
 
 if __name__=="__main__":
-    app.run(debug=True,port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0",port=port,debug=True)
 
 
 
