@@ -4,7 +4,7 @@ FinTracker is a full-stack personal finance tracking web application that allows
 
 The application includes authentication, transaction tracking, analytics, and category-based expense visualization.
 
-# Deployed link: 
+## Deployed link: 
 https://fin-tracker-hazel.vercel.app/
 
 ## Features
