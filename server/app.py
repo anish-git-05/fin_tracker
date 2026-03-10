@@ -15,8 +15,7 @@ jwt=JWTManager(app)
 
 
 def db():
-   return psycopg2.connect(os.getenv('DATABASE_URL'))
-
+   return psycopg2.connect(os.getenv('DATABASE_URL'),sslmode="require")
 
 #_____________________________________________________________________________________________________________________________________#
 #authentication section
@@ -118,7 +117,7 @@ def profile():
 #____________________________________________________________________________________________________________________#
 #accounts section
 
-
+'''
 @app.route('/accounts',methods=['POST'])
 @jwt_required()
 def create_account():
@@ -176,7 +175,7 @@ def get_account():
 
 
 
-
+'''
 #___________________________________________________________________________________________#
 # categories section
 

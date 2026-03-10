@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../style/auth.css"
-import {API_URL} from "./api.js";
+import {API_URL} from ".api.js";
 function Login(){
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
