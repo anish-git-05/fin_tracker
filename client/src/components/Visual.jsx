@@ -12,6 +12,7 @@ import{
 } from "chart.js";
 import{Line,Bar,Pie} from "react-chartjs-2";
 import { useState,useEffect } from "react";
+import "../style/Visual.css";
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -29,21 +30,25 @@ function ExpenseLineChart(){
     const [dataind,setdataind]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/monthlyexpenses");
+            const response=await fetch("http://localhost:5000/summary");
             const data=await response.json();
             setdataind(data);
         }
         getData();  
     },[]);
+    let dayWiseExpenses=[];
+    for(let i=0;i<dataind.length;i++){
+        dayWiseExpenses.push(dataind[i].total);
+    }
     let n=dataind.length;
     for(let i=1;i<=n;i++){
         labels.push(i.toString());
     }
     let datapoints=[];
     if(dataind.length){
-        datapoints.push(dataind[0]);
+        datapoints.push(dayWiseExpenses[0]);
         for(let i=1;i<n;i++){
-            datapoints.push(datapoints[i-1]+dataind[i]);
+            datapoints.push(datapoints[i-1]+dayWiseExpenses[i]);
         }
     }
     const graph={
@@ -75,18 +80,21 @@ function ExpenseLineChart(){
         </div>
     )
 } 
-
 function BarChart(){
     let labels=[];
     const [dataind,setdataind]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/monthlyexpenses");
+            const response=await fetch("http://localhost:5000/summary");
             const data=await response.json();
             setdataind(data);
         }
         getData();  
     },[]);
+    let dayWiseExpenses=[];
+    for(let i=0;i<dataind.length;i++){
+        dayWiseExpenses.push(dataind[i].total);
+    }
     let n=dataind.length;
     for(let i=1;i<=n;i++){
         labels.push(i.toString());
@@ -95,7 +103,7 @@ function BarChart(){
         labels:labels,
         datasets:[{
             label:"Daily Expenses",
-            data:dataind,
+            data:dayWiseExpenses,
             backgroundColor:"indigo",
             borderColor:"indigo",
             borderWidth:1
@@ -122,15 +130,17 @@ function BarChart(){
 }
 
 function CategoryChart(){
-    const[catData,setcatData]=useState({});
+    const[catData,setcatData]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/categoryexpenses");
+            const response=await fetch("http://localhost:5000/categorywiseSpending");
             const data=await response.json();
             setcatData(data);
         }
         getData();
     },[]);
+    catData.sort((a,b)=>b.spent_money-a.spent_money);
+    catData=catData.slice(0,5);
     const pieData={
         labels:Object.keys(catData),
         datasets:[{
@@ -163,8 +173,10 @@ function VisualPage(){
     return(
         <div className="visualPage">
             <ExpenseLineChart/>
-            <BarChart/>
-            <CategoryChart/>
+            <div className="separatorCharts">
+                <BarChart/>
+                <CategoryChart/>
+            </div>
         </div>
     )
 }

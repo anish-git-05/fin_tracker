@@ -5,7 +5,7 @@ function UserDetails(){
     useEffect(()=>{
         async function getData(){
             const token=localStorage.getItem('token');
-            const response=await fetch("http://localhost:5000/api/user/profile",{
+            const response=await fetch("http://localhost:5000/profile",{
                     headers:{
                         "Authorization":`Bearer ${token}`
                     }
@@ -28,7 +28,7 @@ function Logout(){
     const navigate=useNavigate();
     let handleLogout=()=>{
         localStorage.removeItem("token");
-        navigate("/");
+        navigate("/login");
     }
     return(
         <div className='logout'>
@@ -39,7 +39,7 @@ function Logout(){
 
 function Profile(){
     return(
-        <div className='profile'>
+        <div className='profile' style={{backgroundColor:"whitesmoke", maxWidth:"400px",margin:"auto",padding:"16px",borderRadius:"10px"}}>
             <h2>Profile</h2>
             <UserDetails/>
             <Logout/>

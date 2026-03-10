@@ -1,0 +1,44 @@
+.dashboard{
+    display:flex;
+    flex-direction: column;
+    padding:20px;
+    width: 100%;
+    gap:20px;
+    background-color: #1D2942;
+}
+
+.addTransaction{
+    padding:20px;
+    border-radius:10px;
+    max-width: 368px;
+    width: 100%;
+    margin:auto;
+}
+
+.summaryCard{
+    padding:32px;
+    background-color:white ;
+    border-radius: 10px;
+    max-width:600px;
+    margin:auto;
+}
+
+.bottomSection{
+    display:flex;
+    gap:20px;
+    flex-wrap: wrap;
+}
+
+.recentTransactions{
+    flex:2;
+    padding:20px;
+    background-color: white;
+    min-width: 300px;
+}
+
+.topCategories{
+    flex:1;
+    padding:20px;
+    background-color: white;
+    min-width: 280px;
+}
