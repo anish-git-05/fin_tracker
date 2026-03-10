@@ -196,7 +196,7 @@ def get_cat():
                 'category_id':i[0],
                 'name':i[1],
             })
-        return jsonify({'category list':cat_list}),200
+        return jsonify(cat_list),200
     except Exception as e:
         return jsonify({'message':str(e)}),500
     finally:
@@ -234,7 +234,7 @@ def get_categorywise():
                 'category_id':i[1],
                 'spent_money':float(i[2])
             })
-        return jsonify({'categorywise_spending':sp_list}),200
+        return jsonify(sp_list),200
     except Exception as e:
         return jsonify({'message':str(e)}),500
     finally:
@@ -304,7 +304,7 @@ def get_transactions():
                 'time_details':i[2].strftime("%Y-%m-%d %H:%M:%S"),
                 'category_name':i[3]
             })
-        return jsonify({'transactions': t_list}), 200
+        return jsonify(t_list), 200
     except Exception as e:
         return jsonify({'message':str(e)}),500
     finally:
@@ -346,7 +346,7 @@ def summary():
                 'spend_date':i[0].strftime("%Y-%m-%d"),
                 'total':float(i[1]),
             })
-        return jsonify({'daywisespending': t_list}), 200
+        return jsonify(t_list), 200
     except Exception as e:
         return jsonify({'message':str(e)}),500
     finally:
