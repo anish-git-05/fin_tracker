@@ -8,7 +8,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-print(f"DEBUG: Password found is -> {os.getenv('DB_password')}")
 app=Flask(__name__)
 CORS(app)
 app.config['JWT_SECRET_KEY']=os.getenv('JWT_SECRET_KEY')
@@ -16,7 +15,7 @@ jwt=JWTManager(app)
 
 
 def db():
-   return psycopg2.connect(os.getenv('DATABASE_URL'))
+   return psycopg2.connect(os.getenv('DATABASE_URL'),sslmode="require")
 
 #_____________________________________________________________________________________________________________________________________#
 #authentication section
@@ -118,7 +117,7 @@ def profile():
 #____________________________________________________________________________________________________________________#
 #accounts section
 
-
+'''
 @app.route('/accounts',methods=['POST'])
 @jwt_required()
 def create_account():
@@ -176,7 +175,7 @@ def get_account():
 
 
 
-
+'''
 #___________________________________________________________________________________________#
 # categories section
 
