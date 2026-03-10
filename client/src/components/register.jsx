@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {API_URL} from "./api.js";
 import "../style/auth.css"
 function Register(){
   const [email, setEmail] = useState('');
