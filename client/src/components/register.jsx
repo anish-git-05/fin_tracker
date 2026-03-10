@@ -32,7 +32,7 @@ function Register(){
     <div className="auth-card">
         
         <form onSubmit={handleRegister}>
-          <h2>Register</h2>
+          <h2 style={{color:"white"}}>Register</h2>
           <input type="text" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
           <input type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required />
           <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />

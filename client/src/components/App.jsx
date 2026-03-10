@@ -5,6 +5,7 @@ import Register from "./register.jsx"
 import {Navbar} from "./navbar"
 import VisualPage from "./Visual.jsx"
 import Dashboard from "./Dashboard.jsx"
+import Profile from "./profile.jsx"
 import "../style/App.css"
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/register" element={<Register/>}></Route>
         <Route path="/visual" element={<VisualPage/>}></Route>
         <Route path="/dashboard" element={<Dashboard/>}></Route>
+        <Route path="/profile" element={<Profile/>}></Route>
       </Routes>
     </BrowserRouter>
   );

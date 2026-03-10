@@ -1,6 +1,10 @@
 import { useState } from "react";
 import "../style/auth.css"
+<<<<<<< HEAD
 function Login({onSuccess,setlogin}){
+=======
+function Login(){
+>>>>>>> a711c139ea5f828027b28d2b565b9a550258bbcf
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
     const [message,setmessage]=useState('');
@@ -32,7 +36,7 @@ function Login({onSuccess,setlogin}){
         <div className="auth-container">
             <div className="auth-card">
                 <form onSubmit={handleLogin}>
-                    <h2>Login</h2>
+                    <h2 style={{color:"white"}}>Login</h2>
                     <input type="text" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
                     <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
                     <button type="submit">Login</button>

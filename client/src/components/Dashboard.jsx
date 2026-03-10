@@ -1,7 +1,60 @@
 import {useState,useEffect} from "react";
+import "../style/Dashboard.css";
+function AddTransaction(){
+    const [categories,setcategories]=useState([]);
+    useEffect(()=>{
+        async function getData(){
+            const response=await fetch("http://localhost:5000/categories");
+            const data=await response.json();
+            setcategories(data);
+        }
+        getData();
+    },[]);
+    const [transaction,setTransaction]=useState({
+        amount:"",
+        category_id:"",
+    });
+    const handleSubmit=async (e)=>{
+        e.preventDefault();
+        let token=localStorage.getItem("token");
+        const response=await fetch("http://localhost:5000/addtransactions",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                "Authorization":`Bearer ${token}`
+            },
+            body:JSON.stringify({
+                amount:transaction.amount,
+                category_id:transaction.category_id
+            })
 
+        });
+        const data=await response.json();
+        if(response.ok){
+            alert("Transaction added successfully");
+            setTransaction({amount:"",category:""});
+        }else{
+            alert(data.message || "Failed to add transaction");
+        }
+    }
+    return(
+        <div className="addTransaction">
+            <h3 style={{color:"white"}}>Add Transaction</h3>
+            <form onSubmit={handleSubmit}>
+                <input type="number" placeholder="Amount" value={transaction.amount} onChange={(e)=>setTransaction({...transaction,amount:e.target.value})} required/>
+                <select value={transaction.category_id} onChange={(e)=>setTransaction({...transaction,category_id:e.target.value})} required>
+                    <option value="">Select Category</option>
+                    {Object.entries(categories).map(([id,name])=>(
+                        <option key={id} value={id}>{name}</option>
+                    ))}
+                </select>
+                <button type="submit">Add</button>
+            </form>
+        </div>
+    )
+}
 function SummaryCard(){
-    const [sumData,setsumData]=useState({});
+    const [sumData,setsumData]=useState([]);
     useEffect(()=>{
         async function getData(){
             const response=await fetch("http://localhost:5000/summary");
@@ -10,12 +63,23 @@ function SummaryCard(){
         }
         getData();
     },[]);
+    let sumExpenses=0;
+    for(let i=0;i<sumData.length;i++){
+        sumExpenses+=sumData[i].total;
+    }
+    let averageDailyExpenditure=sumExpenses/sumData.length;
+    let highestSingleDayExpenditure=0;
+    for(let i=0;i<sumData.length;i++){
+        if(sumData[i].total>highestSingleDayExpenditure){
+            highestSingleDayExpenditure=sumData[i].total;
+        }
+    }
     return(
         <div className="summaryCard">
             <h3>Summary</h3>
-            <p>Total expenses of the month:{sumData.totalExpenses}</p>
-            <p>Average daily expenditure:{sumData.averageDailyExpenditure}</p>
-            <p>Highest single day expenditure:{sumData.highestSingleDayExpenditure}</p>
+            <p>Total expenses of the month:{sumExpenses}</p>
+            <p>Average daily expenditure:{averageDailyExpenditure}</p>
+            <p>Highest single day expenditure:{highestSingleDayExpenditure}</p>
         </div>
     )
 }
@@ -24,7 +88,7 @@ function RecentTransactions(){
     const [transacactions,settransactions]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const reponse =await fetch("http://localhost:5000/recenttransactions");
+            const response =await fetch("http://localhost:5000/gettransactions");
             const data =await response.json();
             settransactions(data);
         }
@@ -35,8 +99,8 @@ function RecentTransactions(){
             <h3>Recent Transactions</h3>
             {
                 transacactions.map((t)=>(
-                    <div key={t.id} className="transactionItem">
-                        <p>{t.date}: {t.category} - Rs{t.amount}</p>
+                    <div key={t.transaction_id} className="transactionItem">
+                        <p>{t.time_details}: {t.category_name} - Rs{t.amount}</p>
                     </div>
                 )
                 )
@@ -49,19 +113,21 @@ function TopCategories(){
     const [catData,setcatData]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/topcategories");
+            const response=await fetch("http://localhost:5000/categorywiseSpending");
             const data=await response.json();
             setcatData(data);
         }
         getData();
     },[]);
+    catData.sort((a,b)=>b.spent_money-a.spent_money);
+    catData=catData.slice(0,5);
     return(
         <div className="topCategories">
             <h3>Top Spending Categories</h3>
             {
                 catData.map((c)=>(
                     <div key={c.id} className="categoryItem">
-                        <p>{c.category}: Rs{c.total}</p>
+                        <p>{c.category}: Rs{c.spent_money}</p>
                     </div>
                 ))
     }
@@ -72,9 +138,12 @@ function TopCategories(){
 function Dashboard(){
     return(
         <div className="dashboard">
+            <AddTransaction/>
             <SummaryCard/>
-            <RecentTransactions/>
-            <TopCategories/>
+            <div className="bottomSection">
+                <RecentTransactions/>
+                <TopCategories/>
+            </div>
         </div>
     )
 }

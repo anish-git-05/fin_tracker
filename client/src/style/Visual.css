@@ -1,0 +1,33 @@
+.visualPage{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    background-color:#1D2942 ;
+}
+
+.monthlyGraph{
+   height: 400px;
+   background-color:white;
+   margin: 24px;
+   border-radius: 12px;
+}
+
+.separatorCharts{
+    display:flex;
+    flex-direction:row;
+    gap:24px;
+    margin: 24px;
+
+}
+
+.PieChart{
+    flex:1;
+    background-color:white;
+    border-radius: 12px;
+}
+
+.BarGraph{
+    background-color:white;
+    border-radius: 12px;
+    flex:2;
+}
