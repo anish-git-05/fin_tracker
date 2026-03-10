@@ -18,7 +18,11 @@ jwt=JWTManager(app)
 def db():
    return psycopg2.connect(os.getenv('DATABASE_URL'))
 
-
+@app.route("/initdb")
+def initdb():
+    from init_db import setup_db
+    setup_db()
+    return {"message": "Database initialized"}
 #_____________________________________________________________________________________________________________________________________#
 #authentication section
 
