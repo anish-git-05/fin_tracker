@@ -6,7 +6,7 @@ load_dotenv()
 
 def setup_db():
     try:
-        conn=psycopg2.connect(host="localhost",database="fintrack",user="postgres",password=os.getenv('DB_password'))
+        conn=psycopg2.connect(os.getenv('DATABASE_URL'),sslmode="require")
         cur=conn.cursor()
         cur.execute("drop table if exists transactions")
         cur.execute("drop table if exists accounts")
