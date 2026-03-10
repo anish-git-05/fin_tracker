@@ -36,5 +36,9 @@ def setup_db():
     except Exception as e:
         print("Error in database proceedings!",e)
 
+
+
+
+
 if __name__=="__main__":
     setup_db()

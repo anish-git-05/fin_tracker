@@ -1,10 +1,19 @@
 import {useState,useEffect} from "react";
 import "../style/Dashboard.css";
+
+function authfetch(url){
+    const token=localStorage.getItem("token");
+    return fetch(url,{
+        headers:{
+            "Authorization":`Bearer ${token}`
+        }
+    });
+}
 function AddTransaction(){
     const [categories,setcategories]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/categories");
+            const response=await fetch(`${API_URL}/categories`);
             const data=await response.json();
             setcategories(data);
         }
@@ -17,7 +26,7 @@ function AddTransaction(){
     const handleSubmit=async (e)=>{
         e.preventDefault();
         let token=localStorage.getItem("token");
-        const response=await fetch("http://localhost:5000/addtransactions",{
+        const response=await fetch(`${API_URL}/addtransactions`,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
@@ -59,7 +68,7 @@ function SummaryCard(){
     const [sumData,setsumData]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/summary");
+            const response=await authfetch(`${API_URL}/summary`);
             const data=await response.json();
             setsumData(data);
         }
@@ -90,7 +99,7 @@ function RecentTransactions(){
     const [transactions,settransactions]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response =await fetch("http://localhost:5000/gettransactions");
+            const response =await authfetch(`${API_URL}/gettransactions`);
             const data =await response.json();
             settransactions(data);
         }
@@ -115,15 +124,19 @@ function TopCategories(){
     const [catData,setcatData]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/categorywiseSpending");
+            const response=await authfetch(`${API_URL}/categorywiseSpending`);
             const data=await response.json();
             setcatData(data);
         }
         getData();
     },[]);
     let catList=[];
-    for(let key in catData){
-        catList.push({category:key,spent_money:catData[key]});
+    for(let i=0;i<catData.length;i++){
+        catList.push({
+            category_id:catData[i].category_id,
+            category_name:catData[i].category_name,
+            spent_money:catData[i].spent_money
+        })
     }
     catList.sort((a,b)=>b.spent_money-a.spent_money);
     catList=catList.slice(0,5);

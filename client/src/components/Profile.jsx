@@ -5,7 +5,7 @@ function UserDetails(){
     useEffect(()=>{
         async function getData(){
             const token=localStorage.getItem('token');
-            const response=await fetch("http://localhost:5000/profile",{
+            const response=await fetch(`${API_URL}/profile`,{
                     headers:{
                         "Authorization":`Bearer ${token}`
                     }

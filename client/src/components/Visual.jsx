@@ -30,7 +30,7 @@ function ExpenseLineChart(){
     const [dataind,setdataind]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/summary");
+            const response=await fetch(`${API_URL}/summary`);
             const data=await response.json();
             setdataind(data);
         }
@@ -85,7 +85,7 @@ function BarChart(){
     const [dataind,setdataind]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/summary");
+            const response=await fetch(`${API_URL}/summary`);
             const data=await response.json();
             setdataind(data);
         }
@@ -133,15 +133,19 @@ function CategoryChart(){
     const[catData,setcatData]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch("http://localhost:5000/categorywiseSpending");
+            const response=await fetch(`${API_URL}/categorywiseSpending`);
             const data=await response.json();
             setcatData(data);
         }
         getData();
     },[]);
     let catList=[];
-    for(let key in catData){
-        catList.push({category:key,spent_money:catData[key]});
+    for(let i=0;i<catData.length;i++){
+        catList.push({
+            category_id:catData[i].category_id,
+            category_name:catData[i].category_name,
+            spent_money:catData[i].spent_money
+        })
     }
     catList.sort((a,b)=>b.spent_money-a.spent_money);
     catList=catList.slice(0,5);

@@ -8,7 +8,7 @@ function Register(){
   const handleRegister=async(e)=>{
     e.preventDefault();
     try{
-      const response=await fetch('http://localhost:5000/register',{
+      const response=await fetch(`${API_URL}/register`,{
         method:"POST",
         headers:{
           "content-type":"application/json"

@@ -8,7 +8,7 @@ function Login(){
     const handleLogin=async(e)=>{
         e.preventDefault()
         try{
-            const response=await fetch("http://localhost:5000/login",{
+            const response=await fetch(`${API_URL}/login`,{
                 method:"POST",
                 headers:{
                     "content-type":"application/json"
