@@ -5,7 +5,7 @@ import Register from "./register.jsx"
 import {Navbar} from "./navbar"
 import VisualPage from "./Visual.jsx"
 import Dashboard from "./Dashboard.jsx"
-import Profile from "./profile.jsx"
+import Profile from "./Profile.jsx"
 import "../style/App.css"
 function App() {
   return (
