@@ -93,9 +93,10 @@ def protected():
 
 
 @app.route('/accounts',methods=['POST'])
+@jwt_required()
 def create_account():
     data=request.get_json()
-    uid=data.get('user_id')
+    uid = get_jwt_identity()
     name=data.get('name')
     bal=data.get('balance',0.00)
 
@@ -119,8 +120,9 @@ def create_account():
             conn.close()
 
 @app.route('/accounts',methods=['GET'])
+@jwt_required()
 def get_account():
-    uid=request.args.get('user_id')
+    uid = get_jwt_identity()
     if not uid:
         return jsonify({'message':'user_id is required.'}),400
     conn=None
@@ -176,8 +178,9 @@ def get_cat():
 
 
 @app.route('/categorywise_spending',methods=['GET'])
+@jwt_required()
 def get_categorywise():
-    uid=request.args.get('user_id')
+    uid = get_jwt_identity()
 
     if not uid:
         return jsonify({'message': 'user_id is required.'}), 400
@@ -215,9 +218,10 @@ def get_categorywise():
 #transaction section
 
 @app.route('/transactions',methods=['POST'])
+@jwt_required()
 def add_transaction():
     data=request.get_json()
-    uid=data.get('user_id')
+    uid = get_jwt_identity()
     aid=data.get('account_id')
     cid=data.get('category_id')
     kharcha=data.get('amount')
@@ -245,8 +249,9 @@ def add_transaction():
 
 
 @app.route('/transactions',methods=['GET'])
+@jwt_required()
 def det_transactions():
-    uid=request.args.get('user_id')
+    uid = get_jwt_identity()
     
     if not uid:
         return jsonify({'message': 'user_id is required.'}), 400
@@ -285,3 +290,7 @@ def det_transactions():
 
 if __name__=="__main__":
     app.run(debug=True,port=5000)
+
+
+
+
