@@ -18,10 +18,6 @@ def db():
    return psycopg2.connect(os.getenv('DATABASE_URL'),sslmode="require")
 
 @app.route("/initdb")
-def initdb():
-    from init_db import setup_db
-    setup_db()
-    return {"message": "database initialized"}
 #_____________________________________________________________________________________________________________________________________#
 #authentication section
 
