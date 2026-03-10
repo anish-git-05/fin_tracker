@@ -168,7 +168,7 @@ def get_cat():
                 'name':i[1],
                 'is_essential':i[2]
             })
-        return jsonify({'category list':cat_list}),200
+        return jsonify(cat_list),200
     except Exception as e:
         return jsonify({'message':str(e)}),500
     finally:
@@ -248,7 +248,7 @@ def add_transaction():
             conn.close()
 
 
-@app.route('/transactions',methods=['GET'])
+@app.route('/gettransactions',methods=['GET'])
 @jwt_required()
 def det_transactions():
     uid = get_jwt_identity()
@@ -275,7 +275,7 @@ def det_transactions():
                 'category_name':i[3],
                 'account_name':i[4]
             })
-        return jsonify({'transactions': t_list}), 200
+        return jsonify(t_list), 200
     except Exception as e:
         return jsonify({'message':str(e)}),500
     finally:

@@ -139,13 +139,17 @@ function CategoryChart(){
         }
         getData();
     },[]);
-    catData.sort((a,b)=>b.spent_money-a.spent_money);
-    catData=catData.slice(0,5);
+    let catList=[];
+    for(let key in catData){
+        catList.push({category:key,spent_money:catData[key]});
+    }
+    catList.sort((a,b)=>b.spent_money-a.spent_money);
+    catList=catList.slice(0,5);
     const pieData={
-        labels:Object.keys(catData),
+        labels:Object.keys(catList),
         datasets:[{
             label:"Category wise Expenses",
-            data:Object.values(catData),
+            data:Object.values(catList),
             backgroundColor:["red","blue","green","orange","purple","cyan","magenta","yellow","brown","gray"],
             borderColor:"black",
             borderWidth:1

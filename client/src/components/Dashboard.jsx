@@ -32,7 +32,7 @@ function AddTransaction(){
         const data=await response.json();
         if(response.ok){
             alert("Transaction added successfully");
-            setTransaction({amount:"",category:""});
+            setTransaction({amount:"",category_id:""});
         }else{
             alert(data.message || "Failed to add transaction");
         }
@@ -41,12 +41,14 @@ function AddTransaction(){
         <div className="addTransaction">
             <h3 style={{color:"white"}}>Add Transaction</h3>
             <form onSubmit={handleSubmit}>
-                <input type="number" placeholder="Amount" value={transaction.amount} onChange={(e)=>setTransaction({...transaction,amount:e.target.value})} required/>
+                <input type="number" min="0" placeholder="Amount" value={transaction.amount} onChange={(e)=>setTransaction({...transaction,amount:e.target.value})} required/>
                 <select value={transaction.category_id} onChange={(e)=>setTransaction({...transaction,category_id:e.target.value})} required>
-                    <option value="">Select Category</option>
-                    {Object.entries(categories).map(([id,name])=>(
-                        <option key={id} value={id}>{name}</option>
-                    ))}
+                   <option value="">Select Category</option>
+                   {
+                    categories.map((c)=>(
+                        <option key={c.category_id} value={c.category_id}>{c.name}</option>
+                    ))
+                   }
                 </select>
                 <button type="submit">Add</button>
             </form>
@@ -67,7 +69,7 @@ function SummaryCard(){
     for(let i=0;i<sumData.length;i++){
         sumExpenses+=sumData[i].total;
     }
-    let averageDailyExpenditure=sumExpenses/sumData.length;
+    let averageDailyExpenditure=sumData.length?sumExpenses/sumData.length:0;
     let highestSingleDayExpenditure=0;
     for(let i=0;i<sumData.length;i++){
         if(sumData[i].total>highestSingleDayExpenditure){
@@ -85,7 +87,7 @@ function SummaryCard(){
 }
 
 function RecentTransactions(){
-    const [transacactions,settransactions]=useState([]);
+    const [transactions,settransactions]=useState([]);
     useEffect(()=>{
         async function getData(){
             const response =await fetch("http://localhost:5000/gettransactions");
@@ -98,7 +100,7 @@ function RecentTransactions(){
         <div className="recentTransactions">
             <h3>Recent Transactions</h3>
             {
-                transacactions.map((t)=>(
+                transactions.map((t)=>(
                     <div key={t.transaction_id} className="transactionItem">
                         <p>{t.time_details}: {t.category_name} - Rs{t.amount}</p>
                     </div>
@@ -119,15 +121,19 @@ function TopCategories(){
         }
         getData();
     },[]);
-    catData.sort((a,b)=>b.spent_money-a.spent_money);
-    catData=catData.slice(0,5);
+    let catList=[];
+    for(let key in catData){
+        catList.push({category:key,spent_money:catData[key]});
+    }
+    catList.sort((a,b)=>b.spent_money-a.spent_money);
+    catList=catList.slice(0,5);
     return(
         <div className="topCategories">
             <h3>Top Spending Categories</h3>
             {
-                catData.map((c)=>(
-                    <div key={c.id} className="categoryItem">
-                        <p>{c.category}: Rs{c.spent_money}</p>
+                catList.map((c)=>(
+                    <div key={c.category_id} className="categoryItem">
+                        <p>{c.category_name}: Rs{c.spent_money}</p>
                     </div>
                 ))
     }
