@@ -29,7 +29,7 @@ function Logout(){
     const navigate=useNavigate();
     let handleLogout=()=>{
         localStorage.removeItem("token");
-        navigate("/login");
+        window.location.href = '/';
     }
     return(
         <div className='logout'>
