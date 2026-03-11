@@ -24,6 +24,7 @@ function Login(){
             setmessage(data.message);
             if(data.access_token){
                 localStorage.setItem('token',data.access_token)
+                window.location.href = '/';
             }
         }catch(error){
             setmessage("Network error");
