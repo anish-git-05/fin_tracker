@@ -26,12 +26,20 @@ ChartJS.register(
     Tooltip
 );
 
+function authfetch(url){
+    const token=localStorage.getItem("token");
+    return fetch(url,{
+        headers:{
+            "Authorization":`Bearer ${token}`
+        }
+    });
+}
 function ExpenseLineChart(){
     let labels=[];
     const [dataind,setdataind]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch(`${API_URL}/summary`);
+            const response=await authfetch(`${API_URL}/summary`);
             const data=await response.json();
             setdataind(data);
         }
@@ -86,7 +94,7 @@ function BarChart(){
     const [dataind,setdataind]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch(`${API_URL}/summary`);
+            const response=await authfetch(`${API_URL}/summary`);
             const data=await response.json();
             setdataind(data);
         }
@@ -134,7 +142,7 @@ function CategoryChart(){
     const[catData,setcatData]=useState([]);
     useEffect(()=>{
         async function getData(){
-            const response=await fetch(`${API_URL}/categorywiseSpending`);
+            const response=await authfetch(`${API_URL}/categorywiseSpending`);
             const data=await response.json();
             setcatData(data);
         }
