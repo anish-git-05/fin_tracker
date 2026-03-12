@@ -219,7 +219,7 @@ def get_categorywise():
                         select c.name,c.category_id,SUM(t.amount)
                     from transactions t,categories c
                     where t.category_id=c.category_id and t.user_id=%s
-                    group by c.name
+                    group by c.name,c.category_id
                     order by SUM(t.amount) desc
                     """,(uid,))
         
@@ -289,7 +289,7 @@ def get_transactions():
         cur.execute("""
                select  t.transaction_id,t.amount,t.time_details,c.name,a.name
                from transactions t, categories c,accounts a
-               where t.category_id=c.category_id and t.account_id=a.account_id and t.user_id=%s
+               where t.category_id=c.category_id and t.user_id=%s
                 order by t.time_details desc
                 limit 5       
         """,(uid,))
