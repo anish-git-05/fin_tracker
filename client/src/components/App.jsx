@@ -6,6 +6,7 @@ import {Navbar} from "./navbar"
 import VisualPage from "./Visual.jsx"
 import Dashboard from "./Dashboard.jsx"
 import Profile from "./Profile.jsx"
+import Predict from "./Predict.jsx"
 import "../style/App.css"
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/visual" element={<VisualPage/>}></Route>
         <Route path="/dashboard" element={<Dashboard/>}></Route>
         <Route path="/profile" element={<Profile/>}></Route>
+        <Route path="/predict" element={<Predict/>}></Route>
       </Routes>
     </BrowserRouter>
   );
