@@ -287,7 +287,7 @@ def get_transactions():
         conn = db()
         cur = conn.cursor()
         cur.execute("""
-               select  t.transaction_id,t.amount,t.time_details,c.name,a.name
+               select  t.transaction_id,t.amount,t.time_details,c.name
                from transactions t, categories c
                where t.category_id=c.category_id and t.user_id=%s
                 order by t.time_details desc
