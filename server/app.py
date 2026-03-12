@@ -278,7 +278,7 @@ def add_transaction():
 @app.route('/gettransactions',methods=['GET'])
 @jwt_required()
 def get_transactions():
-    uid = get_jwt_identity()
+    uid = int(get_jwt_identity())
     
     if not uid:
         return jsonify({'message': 'user_id is required.'}), 400
@@ -288,7 +288,7 @@ def get_transactions():
         cur = conn.cursor()
         cur.execute("""
                select  t.transaction_id,t.amount,t.time_details,c.name,a.name
-               from transactions t, categories c,accounts a
+               from transactions t, categories c
                where t.category_id=c.category_id and t.user_id=%s
                 order by t.time_details desc
                 limit 5       
