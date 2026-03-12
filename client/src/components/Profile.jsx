@@ -19,7 +19,7 @@ function UserDetails(){
     },[]);
     return(
         <div className="userDetails">
-            <p>UserName:{user.name}</p>
+            <p>UserName:{user.username}</p>
             <p>Email:{user.email}</p>
         </div>
     )
