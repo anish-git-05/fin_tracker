@@ -158,11 +158,17 @@ function CategoryChart(){
     }
     catList.sort((a,b)=>b.spent_money-a.spent_money);
     catList=catList.slice(0,5);
+    let Labels=[];
+    let Dataset=[];
+    for (let obj of catList){
+        Labels.push(obj.category_name);
+        Dataset.push(obj.spent_money);
+    }
     const pieData={
-        labels:Object.keys(catList),
+        labels:Labels,
         datasets:[{
             label:"Category wise Expenses",
-            data:Object.values(catList),
+            data:Dataset,
             backgroundColor:["red","blue","green","orange","purple","cyan","magenta","yellow","brown","gray"],
             borderColor:"black",
             borderWidth:1
