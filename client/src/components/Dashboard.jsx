@@ -1,6 +1,9 @@
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip } from 'chart.js';
 import {useState,useEffect} from "react";
 import "../style/Dashboard.css";
 import {API_URL} from "../api.js";
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 function authfetch(url){
     const token=localStorage.getItem("token");
     return fetch(url,{
@@ -49,7 +52,7 @@ function AddTransaction(){
     return(
         <div className="addTransaction">
             <h3 style={{color:"white"}}>Add Transaction</h3>
-            <form onSubmit={handleSubmit}>
+            <form className="tfom" onSubmit={handleSubmit}>
                 <input type="number" min="0" placeholder="Amount" value={transaction.amount} onChange={(e)=>setTransaction({...transaction,amount:e.target.value})} required/>
                 <select value={transaction.category_id} onChange={(e)=>setTransaction({...transaction,category_id:e.target.value})} required>
                    <option value="">Select Category</option>
@@ -87,10 +90,18 @@ function SummaryCard(){
     }
     return(
         <div className="summaryCard">
-            <h3>Summary</h3>
-            <p>Total expenses of the month:{sumExpenses}</p>
-            <p>Average daily expenditure:{averageDailyExpenditure}</p>
-            <p>Highest single day expenditure:{highestSingleDayExpenditure}</p>
+            <h3>Monthly Spending Insights 📊</h3>
+            <div className="grid">
+                <div className="box">
+                    <p>Total Spent:{sumExpenses}</p>
+                </div>
+                <div className="box">
+                    <p>Average Daily Expenditure:{averageDailyExpenditure}</p>
+                </div>
+                <div className="box">
+                    <p>Highest Single Day Expenditure:{highestSingleDayExpenditure}</p>
+                </div>
+            </div>
         </div>
     )
 }
@@ -106,16 +117,41 @@ function RecentTransactions(){
         getData();
     },[])
     return(
+        // <div className="recentTransactions">
+        //     <h3>Recent Transactions</h3>
+        //     {
+        //         transactions.map((t)=>(
+        //             <div key={t.transaction_id} className="transactionItem">
+        //                 <p>{t.time_details}: {t.category_name} - Rs{t.amount}</p>
+        //             </div>
+        //         )
+        //         )
+        //     }
+        // </div>
         <div className="recentTransactions">
             <h3>Recent Transactions</h3>
-            {
-                transactions.map((t)=>(
-                    <div key={t.transaction_id} className="transactionItem">
-                        <p>{t.time_details}: {t.category_name} - Rs{t.amount}</p>
-                    </div>
-                )
-                )
-            }
+            <div className="t">
+                <table className='tabl'>
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            transactions.map((t)=>(
+                                <tr key={t.transaction_id}>
+                                    <td>{t.time_details}</td>
+                                    <td>{t.category_name}</td>
+                                    <td style={{fontWeight:"600", color:"#0F172A"}}>{t.amount}</td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }
@@ -141,16 +177,34 @@ function TopCategories(){
     catList.sort((a,b)=>b.spent_money-a.spent_money);
     catList=catList.slice(0,5);
     return(
-        <div className="topCategories">
-            <h3>Top Spending Categories</h3>
-            {
-                catList.map((c)=>(
-                    <div key={c.category_id} className="categoryItem">
-                        <p>{c.category_name}: Rs{c.spent_money}</p>
-                    </div>
-                ))
-    }
-        </div>
+    //     <div className="topCategories">
+    //         <h3>Top Spending Categories</h3>
+    //         {
+    //             catList.map((c)=>(
+    //                 <div key={c.category_id} className="categoryItem">
+    //                     <p>{c.category_name}: Rs{c.spent_money}</p>
+    //                 </div>
+    //             ))
+    // }
+    //     </div>
+            <div className="topCategories">
+                <h3>Top Spending Categories</h3>
+                <div style={{ height: "250px", width: "100%", marginTop: "10px" }}>
+                    <Bar
+                    data={{
+                        labels:catList.map((c)=>c.category_name),
+                        datasets:[{
+                            data:catList.map((c)=>c.spent_money),
+                            backgroundColor:'#6366F1',borderRadius:4
+                        }]
+                    }}
+                    options={{
+                        indexAxis:'y',
+                        maintainAspectRatio:false,plugins:{legend:{display:false}}
+                    }}
+                    />
+                </div>
+            </div>
     )
 }
 
@@ -160,8 +214,8 @@ function Dashboard(){
             <AddTransaction/>
             <SummaryCard/>
             <div className="bottomSection">
-                <RecentTransactions/>
                 <TopCategories/>
+                <RecentTransactions/>
             </div>
         </div>
     )
