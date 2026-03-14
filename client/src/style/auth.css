@@ -23,7 +23,7 @@ input {
     margin: 10px 0;
     border-radius: 8px;
     border-width: 1px;
-    border-color: white;
+    border-color: rgb(237, 217, 217);
     font-size: 16px;
     outline: none;
     transition: 0.3s;
@@ -35,29 +35,22 @@ input:focus {
     box-shadow: 0 0 5px rgba(0, 110, 255, 0.5);
 }
 button {
-    padding: 12px 20px;
+    padding: 12px 15px;
     border: none;
     border-radius: 8px;
-    background: #007bfe;
+    background: #222d7e;
     color: white;
     font-size: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
+    
 }
 
 button:hover {
     background: #004da5;
-    
 }
 input{
     margin:12px;
     box-shadow: 1px 1px 2px rgb(24, 23, 23)
 }
-button{
-    margin:12px;
-    background-color:blue;
-    color:white;
-    border:none;
-    padding:4px;
-    box-shadow: 1px 1px 2px rgb(24, 23, 23)
-}
+

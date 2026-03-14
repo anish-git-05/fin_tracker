@@ -1,5 +1,5 @@
 import {useState,useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import "../style/profile.css";
 import {API_URL} from "../api.js";
 function UserDetails(){
     const [user,setUser]=useState({});
@@ -19,32 +19,44 @@ function UserDetails(){
     },[]);
     return(
         <div className="userDetails">
-            <p>UserName:{user.username}</p>
+            <img 
+                className="pp" 
+                src={user.username ? `https://ui-avatars.com/api/?name=${user.username}&background=6366F1&color=fff&size=128` : "https://ui-avatars.com/api/?name=User"} 
+                alt="User Logo" 
+            />
+            <p>Name:{user.username}</p>
             <p>Email:{user.email}</p>
         </div>
     )
 }
 
 function Logout(){
-    const navigate=useNavigate();
     let handleLogout=()=>{
         localStorage.removeItem("token");
         window.location.href = '/';
     }
     return(
-        <div className='logout'>
-            <button onClick={handleLogout}>Logout</button>
+        <div >
+            <button className='log' onClick={handleLogout}>Logout</button>
         </div>
     )
 }
 
 function Profile(){
     return(
-        <div className='profile' style={{backgroundColor:"whitesmoke", maxWidth:"400px",margin:"auto",padding:"16px",borderRadius:"10px"}}>
-            <h2>Profile</h2>
-            <UserDetails/>
-            <Logout/>
+        <div className="profile">
+            <div className='pc' >
+                <h2 style={{color:'black'}}>Profile</h2>
+                <div className="user-detail">
+                    <UserDetails/>
+                </div>
+                <div className="logout">
+                    <Logout/>
+                </div> 
+                
+            </div>
         </div>
+        
     )
 }
 

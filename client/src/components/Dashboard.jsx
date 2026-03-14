@@ -51,7 +51,7 @@ function AddTransaction(){
     }
     return(
         <div className="addTransaction">
-            <h3 style={{color:"white"}}>Add Transaction</h3>
+            <h3 style={{ marginTop: 0, color: "#1D2942", fontSize: "20px", textAlign: "center" }}>Add Transaction</h3>
             <form className="tfom" onSubmit={handleSubmit}>
                 <input type="number" min="0" placeholder="Amount" value={transaction.amount} onChange={(e)=>setTransaction({...transaction,amount:e.target.value})} required/>
                 <select value={transaction.category_id} onChange={(e)=>setTransaction({...transaction,category_id:e.target.value})} required>
