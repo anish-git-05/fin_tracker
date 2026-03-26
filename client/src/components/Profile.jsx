@@ -12,6 +12,11 @@ function UserDetails(){
                     }
                 }
             )
+            if (!response.ok) {
+                localStorage.removeItem('token'); 
+                window.location.href = '/login';  
+                return;
+            }
             const data=await response.json();
             setUser(data);
         }
