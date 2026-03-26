@@ -1,13 +1,16 @@
 import { useState } from "react";
 import "../style/auth.css"
 import {API_URL} from "../api.js";
+import { Link } from "react-router-dom";
 function Register(){
   const [email, setEmail] = useState('');
   const [username,setUsername]=useState('');
   const [password,setPassword]=useState('');
   const [message,setmessage]=useState('');
+  
   const handleRegister=async(e)=>{
     e.preventDefault();
+
     try{
       const response=await fetch(`${API_URL}/register`,{
         method:"POST",
@@ -38,10 +41,14 @@ function Register(){
           <input type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required />
           <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
           <button type="submit">Sign up</button>
+          
         </form>
     </div>
     
     {message && <p>{message}</p>}
+    <p style={{ color: "white", textAlign: "center", marginTop: "15px" }}>
+                    Already have an account? <Link to="/login" style={{ color: "#4da6ff" }}>Login here</Link>
+                </p>
   </div>
 }
 export default Register;
