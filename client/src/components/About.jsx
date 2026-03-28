@@ -48,7 +48,7 @@ function Footer() {
                 <div className="footer-section">
                     <h4>Contact Us</h4>
                     <p>Email: support@fintracker.com</p>
-                    <p>Phone: +91 93350 58091</p>
+                    <p>Phone: +91 xxxxx xxxxx</p>
                 </div>
             </div>
             
