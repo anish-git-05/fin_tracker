@@ -14,5 +14,3 @@ pandas
 scikit-learn
 numpy
 google
-datetime
-calendar
