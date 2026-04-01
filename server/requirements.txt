@@ -13,3 +13,6 @@ flask_jwt_extended==4.7.1
 pandas
 scikit-learn
 numpy
+google
+datetime
+calendar
