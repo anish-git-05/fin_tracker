@@ -36,7 +36,7 @@ def setup_db():
             ('Others', False)
         ]
 
-        cur.execute("create table users(user_id serial primary key,name varchar(50),email varchar(100),passhash text)")
+        cur.execute("create table users(user_id serial primary key,name varchar(50),email varchar(100) unique,passhash text)")
         cur.execute("create table accounts(account_id serial primary key,user_id int,name varchar(40),balance decimal(15,2),foreign key(user_id) references users(user_id))")
         cur.execute("create table categories(category_id serial primary key,name varchar(60),is_essential bool)")
         cur.execute("create table transactions(transaction_id serial primary key,user_id int,account_id int,category_id int,amount decimal(15,2),time_details timestamp default current_timestamp,foreign key(user_id) references users(user_id),foreign key(account_id) references accounts(account_id),foreign key(category_id) references categories(category_id))")
