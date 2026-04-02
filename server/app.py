@@ -420,7 +420,7 @@ def predict():
         
         dff = df[df['amount'] <= upper_bound]
         
-        if len(dff) < 2:
+        if dff['day'].nunique() < 2:
             dff = df
 
         dailyf = dff.groupby('day')['amount'].sum().reset_index()
