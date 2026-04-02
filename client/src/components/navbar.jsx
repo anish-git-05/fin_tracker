@@ -1,11 +1,14 @@
 import { useState } from "react";
-import {Link,useLocation} from "react-router-dom";
-function Navbar(){
-    const token=localStorage.getItem("token");
-    let loggedIn=!!token;
-    const location =useLocation();
-    const [side,setside]=useState(false);
-    const [cl,setcl]=useState(false);
+import { Link, useLocation } from "react-router-dom";
+
+// 1. Receive 'toggle' as a prop
+function Navbar({ toggle }){
+    const token = localStorage.getItem("token");
+    let loggedIn = !!token;
+    const location = useLocation();
+    const [side, setside] = useState(false);
+    const [cl, setcl] = useState(false);
+    
     const closeSidebar = () => {
         setcl(true);
         setTimeout(() => {
@@ -19,7 +22,7 @@ function Navbar(){
         <nav className="navbar">
             <div id="navLeft">
                 {
-                    location.pathname!=="/" &&(
+                    location.pathname !== "/" &&(
                         <div style={{display:'flex'}}>
                         <div className="hamburger-icon" onClick={() => setside(true)}>
                             ☰
@@ -28,7 +31,6 @@ function Navbar(){
                         </div>
                     )
                 }
-                
             </div>
             <div id="navRight">
                  {!loggedIn &&(
@@ -55,7 +57,8 @@ function Navbar(){
                     
                     <div className={`sidebar-offcanvas ${cl ? 'closing' : ''}`}>
                         <button className="close-sidebar-btn" onClick={closeSidebar}>×</button>
-                        <Sidebar closeMenu={closeSidebar} />
+                        {/* 2. Pass 'toggle' down to the Sidebar */}
+                        <Sidebar closeMenu={closeSidebar} toggle={toggle} />
                     </div>
                 </>
             )}
@@ -63,26 +66,42 @@ function Navbar(){
     )
 }
 
-function Sidebar(){
-    const token=localStorage.getItem("token");
-    const loggedIn=!!token;
-    const handleClick=(e)=>{
+// 3. Receive BOTH 'closeMenu' and 'toggle' as props
+function Sidebar({ closeMenu, toggle }){
+    const token = localStorage.getItem("token");
+    const loggedIn = !!token;
+    
+    const handleClick = (e) => {
         if(!loggedIn){
             e.preventDefault();
             alert("Please login to access this feature");
         }
-        else if(closeMenu)closeMenu();
+        else if(closeMenu) closeMenu();
     }
+
+    
+    const handleChatClick = (e) => {
+        e.preventDefault();
+        if(!loggedIn){
+            alert("Please login to access this feature");
+            return;
+        }
+        if(toggle) toggle(); 
+        if(closeMenu) closeMenu(); 
+    }
+
     return(
         <nav className="sidebar">
                 <Link to="/add" onClick={handleClick}>Add Transaction</Link>
                 <Link to="/visual" onClick={handleClick}>Visualisation</Link>
                 <Link to="/predict" onClick={handleClick}>Expense predictor</Link>
+                
+                {/* 5. Change this link to use the new handleChatClick */}
+                <Link to="#" onClick={handleChatClick}>Ask Questions</Link>
+                
                 <Link to="/about">About FinTrack</Link>
         </nav>
     );
 }
 
-
-export {Navbar};
-export {Sidebar};
+export { Navbar, Sidebar };

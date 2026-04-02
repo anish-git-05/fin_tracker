@@ -1,11 +1,11 @@
 import "../style/home.css";
 import {Sidebar} from "./navbar"
 import homeImg from "../assets/Image_home.svg"
-function Home(){
+function Home({toggle}){
     return(
     <div className="home_page">
       <div className="home_content">
-        <Sidebar/>
+        <Sidebar toggle={toggle} />
         <div className="main_area">
           <img src={homeImg} className="homeImage"></img>
           <div className="text_box">

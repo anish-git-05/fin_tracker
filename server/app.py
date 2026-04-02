@@ -519,6 +519,68 @@ def predict():
             conn.close()
 
 
+@app.route('/chat', methods=['POST'])
+@jwt_required()
+def chat():
+    uid = get_jwt_identity()
+    message = request.json.get('message')
+    
+    if not message:
+        return jsonify({'reply': "Please ask a question!"}), 400
+
+    conn = None
+    try:
+        conn = db()
+        cur = conn.cursor()
+        cur.execute("""
+            select sum(amount) 
+            from transactions 
+            where user_id=%s and extract(month from time_details)=extract(month from current_date)
+        """, (uid,))
+        total=cur.fetchone()[0] or 0
+        cur.execute("""
+            select c.name, sum(t.amount) from transactions t
+            join categories c on t.category_id = c.category_id
+            where t.user_id = %s and extract(month from t.time_details) = extract(month from current_date)
+            group by c.name 
+            order by sum(t.amount) DESC 
+            limit 3;
+        """, (uid,))
+        top_catg = cur.fetchall()
+        cat_text = ", ".join([f"{r[0]} (₹{r[1]})" for r in top_catg]) if top_catg else "None yet"
+
+        ai_model = genai.GenerativeModel('gemini-2.5-flash')
+        prompt = f"""
+        You are 'FinBot', a helpful, highly intelligent financial assistant built into the FinTracker app.
+        
+        The user has asked: "{message}"
+        
+        Here is the user's real-time data for this month:
+        - Total Spent: ₹{total}
+        - Top 3 Spending Categories: {cat_text}
+        
+        Rules for your response:
+        - Answer their question directly using the data provided.
+        - Be conversational, brief, and friendly. 
+        - Do NOT use markdown asterisks or bolding. Keep it clean text.
+        - Maximum 2 or 3 short sentences.
+        """
+        try:
+            ai_response = ai_model.generate_content(prompt)
+            reply = ai_response.text.strip()
+        except Exception as api_error:
+            print(f"Gemini API Limit Hit: {api_error}")
+            reply = "I'm analyzing a lot of data right now and my circuits are a bit busy! But looking at your profile, your total spend is ₹" + str(total_spent) + "."
+
+        return jsonify({'reply': reply}), 200
+    except Exception as e:
+        print("Chat Error:", e)
+        return jsonify({'reply': "Sorry, I am having trouble connecting to your bank vault right now!"}), 500
+    finally:
+        if conn:
+            cur.close()
+            conn.close()
+
 @app.route('/predict/anomalies', methods=['GET'])
 @jwt_required()
 def get_anomalies():
