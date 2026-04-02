@@ -31,6 +31,14 @@ def setup_db():
             ('Healthcare', True),
             ('Others', False)
         ]
+        cur.execute("""
+            DELETE FROM transactions
+            WHERE category_id NOT IN (
+                SELECT MIN(category_id)
+                FROM categories
+                GROUP BY name
+            )
+        """)
         cur.execute('''DELETE FROM categories
                     WHERE category_id NOT IN (
                     SELECT MIN(category_id)
