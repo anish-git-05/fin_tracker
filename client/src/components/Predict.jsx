@@ -7,7 +7,7 @@ function Predict(){
     const [data, setdata] = useState(null);
     const [load, setload] = useState(true);
     const [err, seterr] = useState(""); 
-
+    const month=new Date().toLocaleString('default',{month:'long'})
     useEffect(() => {
         async function getPrediction() {
             const token = localStorage.getItem("token");
@@ -50,7 +50,7 @@ function Predict(){
     return(
         <div className="predict-container">
             <div className="predict-card">
-                <h2>End of Month Forecast</h2>
+                <h2>End of Month Forecast ({month})</h2>
 
                 {load ? (
                     <div className="spinner-container">
@@ -79,13 +79,21 @@ function Predict(){
                                         <span>Current Day</span>
                                         <strong>{data.current_day}</strong>
                                     </div>
+                                    {/* <div className="stat-box">
+                                        <span>Confidence</span>
+                                        <strong style={{ color: data.confidence_score > 70 ? "#51cf66" : "#fcc419" }}>
+                                            {data.confidence_score}%
+                                        </strong>
+                                    </div> */}
                                 </div>
                                 <div className="chart-header">
                                     <div className="chart-title-group">
                                         <span className="live-dot"></span>
                                         <h3>Spending Trajectory</h3>
                                     </div>
-                                    <span className="chart-badge">Linear Regression</span>
+                                    <span className="chart-badge">
+                                        Visualisation
+                                    </span>
                                 </div>
                                 <div style={{ width: '100%', height: 350, marginTop: '30px' }}>
                                         <ResponsiveContainer width="100%" height="100%">
