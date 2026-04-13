@@ -1,33 +1,36 @@
-.visualPage{
-    display:flex;
-    flex-direction:column;
-    width:100%;
-    background-color:#1D2942 ;
+.visual-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 40px 20px;
+    min-height: 80vh;
+    background-color: transparent;
 }
 
-.monthlyGraph{
-   height: 400px;
-   background-color:white;
-   margin: 24px;
-   border-radius: 12px;
+.chart-card {
+    background-color: #161b22;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 25px;
+    width: 100%;
+    max-width: 900px;
+    height: 400px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    position: relative;
 }
 
-.separatorCharts{
-    display:flex;
-    flex-direction:row;
-    gap:24px;
-    margin: 24px;
-
+.pie-card {
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.PieChart{
-    flex:1;
-    background-color:white;
-    border-radius: 12px;
-}
-
-.BarGraph{
-    background-color:white;
-    border-radius: 12px;
-    flex:2;
+.pie-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    max-width: 400px;
 }

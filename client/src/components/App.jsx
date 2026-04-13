@@ -10,12 +10,22 @@ import Predict from "./Predict.jsx"
 import AddTransaction from "./Add.jsx"
 import { About, Footer } from "./About";
 import "../style/App.css"
+import Chatbot from "./Chatbot.jsx";
+import { useState } from "react";
 function App() {
+  const [open,setopen] = useState(false);
+  
+  const toggle = () => {
+      setopen(!open);
+  };
   return (
     <BrowserRouter>
-      <Navbar/>
+    
+      {/* <Navbar/> */}
+      <Navbar toggle={toggle} />
+      <Chatbot open={open} toggle={toggle} />
       <Routes>
-        <Route path="/" element={<Home/>}></Route>
+        <Route path="/" element={<Home toggle={toggle} />}></Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/register" element={<Register/>}></Route>
         <Route path="/visual" element={<VisualPage/>}></Route>
@@ -24,6 +34,7 @@ function App() {
         <Route path="/predict" element={<Predict/>}></Route>
         <Route path="/about" element={<About />} />
         <Route path="/add" element={<AddTransaction />} />
+        {/* <Route path="/chat" element={<Chatbot />} /> */}
       </Routes>
       <Footer />
     </BrowserRouter>

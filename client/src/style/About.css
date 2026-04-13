@@ -1,57 +1,97 @@
-
 .about-container {
-    padding: 40px 20px;
-    color: #e6edf3;
-    max-width: 900px;
-    margin: 0 auto;
-    min-height: 70vh;
+  padding: 40px;
+  color: #e5e7eb;
+  background: #0d1117;
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
 }
 
-.about-title {
-    font-size: 2.5rem;
-    color: #ffffff;
-    text-align: center;
-    margin-bottom: 20px;
+/* HERO */
+.about-hero {
+  text-align: center;
+  margin-bottom: 50px;
 }
 
-.about-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    text-align: center;
-    color: #a0aabf;
-    margin-bottom: 40px;
+.about-hero h1 {
+  font-size: 3rem;
+  background: linear-gradient(90deg, #00ffff, #8b5cf6);
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
+.tagline {
+  font-size: 1.2rem;
+  color: #9ca3af;
+}
+
+.description {
+  max-width: 700px;
+  margin: 10px auto;
+  color: #cbd5f5;
+}
+
+/* SECTIONS */
+.about-section {
+  margin-bottom: 50px;
+}
+
+.about-section h2 {
+  margin-bottom: 20px;
+  color: #60a5fa;
+}
+
+/* FEATURES GRID */
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
 .feature-card {
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease;
+  background: #161b22;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: 0.3s;
 }
 
 .feature-card:hover {
-    transform: translateY(-5px);
-    background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
-.feature-card h3 {
-    margin-top: 0;
-    color: #4da6ff;
-    font-size: 1.2rem;
+/* ML BOX */
+.ml-box {
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.4);
+  padding: 20px;
+  border-radius: 15px;
 }
 
-.feature-card p {
-    color: #a0aabf;
-    font-size: 0.95rem;
-    line-height: 1.5;
+.ml-box ul {
+  margin-top: 10px;
 }
+
+.ml-box li {
+  margin-bottom: 8px;
+}
+
+/* TECH STACK */
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tech-stack span {
+  background: #1e293b;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.9rem;
+}
+
+
 
 .footer-container {
     background-color: #0d1117; 
