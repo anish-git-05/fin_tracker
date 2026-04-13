@@ -1,61 +1,123 @@
-# FinTracker
+📊 FinTracker — AI-Powered Personal Finance Dashboard
 
-FinTracker is a full-stack personal finance tracking web application that allows users to record expenses, visualize spending patterns, and analyze financial behavior through interactive dashboards and charts.
+FinTracker is a secure, full-stack web application designed to help users track, analyze, and predict their expenses.
+It goes beyond traditional finance apps by integrating Machine Learning models for predictive analytics and a Large Language Model (LLM) for personalized financial advice.
 
-The application includes authentication, transaction tracking, analytics, and category-based expense visualization.
+🚀 Key Highlights
+📈 Predict future spending using ML (burn-rate forecasting)
+🚨 Detect unusual expenses using anomaly detection
+🤖 AI-powered financial assistant (FinBot)
+🔐 Secure authentication with JWT
+📊 Interactive dashboards and visualizations
+🧠 Machine Learning Features
+📈 Predictive Analytics (Burn Rate)
+Uses Linear Regression on daily spending data
+Forecasts end-of-month expenses
+Displays predicted trajectory on charts
+🚨 Anomaly Detection
+Uses Isolation Forest
+Identifies unusual transactions (e.g., spikes, anomalies)
+Helps users catch unexpected expenses
+🧹 Data Processing
+Outlier filtering using IQR (Interquartile Range)
+Clean time-based dataset for better predictions
+🤖 FinBot — AI Financial Assistant
+Built using Google Gemini API (gemini-2.5-flash)
+Uses RAG (Retrieval-Augmented Generation):
+Fetches real-time user data via SQL
+Injects into prompt for personalized advice
+Provides:
+Spending insights
+Budget suggestions
+Smart recommendations
+🏗️ Tech Stack
+Frontend
+React.js
+React Router DOM
+Custom CSS (dark theme + animations)
+useState & useEffect
+Backend
+Python (Flask)
+Flask-JWT-Extended (authentication)
+Flask-CORS
+Database
+PostgreSQL
+psycopg2 (with DictCursor)
+Machine Learning
+pandas, numpy
+scikit-learn
+Deployment
+Render
+🔐 Security Features
+JWT-based authentication
+Password hashing (Werkzeug)
+Protected routes (Dashboard, Predictions, AI Chat)
+Input validation (frontend + backend)
+Chronological lock (prevents future transactions)
+⚙️ Core Features
+1. Secure Authentication
+User registration & login
+Encrypted passwords
+Stateless session handling using JWT
+2. Smart Transaction Management
+Add expenses with category & timestamp
+Real-time balance updates
+Strict validation system
+3. Predictive Analytics
+Aggregates daily spending
+Forecasts total monthly spend
+Displays results on interactive charts
+4. Anomaly Detection
+Detects unusual spending patterns
+Flags suspicious transactions automatically
+5. AI Assistant (FinBot)
+Context-aware financial advice
+Uses real-time database insights
+Includes fallback system for reliability
+📊 System Architecture
+User → React Frontend → Flask API → PostgreSQL
+                              ↓
+                      ML Models (Regression + Isolation Forest)
+                              ↓
+                        Gemini API (FinBot)
+📸 Screenshots
 
-## Deployed link: 
-https://fin-tracker-hazel.vercel.app/
+(Add your dashboard screenshots here)
 
-## Features
+📈 Model Evaluation
+Evaluated using:
+MAE (Mean Absolute Error)
+RMSE (Root Mean Squared Error)
+R² Score (Model Fit)
+Time-based train-test split used:
+Train on past data
+Test on future data
+🚀 Future Improvements
+Advanced time-series models (ARIMA / LSTM)
+Mobile application
+Multi-account integration (bank APIs)
+Budget planning module
+Enhanced anomaly explanations
+💡 Why FinTracker?
 
-- User authentication using JWT
-- Add and manage expense transactions
-- Category-based expense tracking
-- Dashboard showing summary statistics
-- Interactive visualizations (line chart, bar chart, pie chart)
-- Recent transaction history
-- Top spending categories
+Unlike traditional expense trackers, FinTracker:
 
-## Tech Stack
+Predicts future spending
+Detects anomalies automatically
+Provides AI-driven financial advice
 
-Frontend:
-- React (Vite)
-- Chart.js
-- CSS
+👉 Making it a smart, data-driven finance system
 
-Backend:
-- Flask
-- JWT Authentication
-- REST API
+🛠️ Setup Instructions
+# Clone repo
+git clone <your-repo-url>
 
-Database:
-- PostgreSQL
-
-Deployment:
-- Frontend: Vercel
-- Backend: Render
-- Database: Render PostgreSQL
-
-## Architecture
-
-User → React Frontend → Flask API → PostgreSQL Database
-
-## Running Locally
-
-Clone the repository:
-
-git clone https://github.com/anish-git-05/fin_tracker.git
-cd fin_tracker
-
-cd server
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python app.py
-
-cd client
+# Frontend
+cd frontend
 npm install
 npm run dev
 
-
+# Backend
+cd backend
+pip install -r requirements.txt
+python app.py
