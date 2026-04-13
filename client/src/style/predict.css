@@ -1,0 +1,215 @@
+.predict-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    min-height: 80vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.predict-card {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background-color: #161b22;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    animation: slideUpFade 0.5s ease-out forwards;
+}
+
+.predict-card h2 {
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #4da6ff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.main-prediction {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 30px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 25px;
+}
+
+.main-prediction p {
+    color: #a0aabf;
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+}
+
+.danger-text {
+    color: #ef4444;
+    font-size: 3.5rem;
+    margin: 0;
+    text-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.stat-box {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-box span {
+    color: #6c757d;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.stat-box strong {
+    color: #e6edf3;
+    font-size: 1.2rem;
+}
+
+.empty-state p, .error-text {
+    color: #a0aabf;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    line-height: 1.6;
+}
+
+.error-text {
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.spinner-container p {
+    color: #a0aabf;
+    margin-top: 15px;
+    animation: pulse 1.5s infinite;
+}
+
+.predict-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(77, 166, 255, 0.2);
+    border-radius: 50%;
+    border-top-color: #4da6ff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+    margin-top: 45px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chart-title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.chart-title-group h3 {
+    color: #e6edf3;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #4da6ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #4da6ff;
+    animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+    0% { opacity: 0.5; box-shadow: 0 0 4px #4da6ff; }
+    50% { opacity: 1; box-shadow: 0 0 12px #4da6ff; }
+    100% { opacity: 0.5; box-shadow: 0 0 4px #4da6ff; }
+}
+
+.chart-badge {
+    background-color: rgba(77, 166, 255, 0.1);
+    color: #4da6ff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid rgba(77, 166, 255, 0.2);
+}
+
+.ai-insight-box {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-top: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: pre-line;
+}
+
+.ai-insight-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.ai-sparkle {
+    font-weight: 600;
+    font-size: 14px;
+    color: #ffd700;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.ai-insight-box p {
+    color: #e6edf3;
+    font-size: 15px;
+    line-height: 1.6;
+}

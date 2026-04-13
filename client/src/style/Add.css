@@ -1,0 +1,71 @@
+.addTransaction {
+    background-color: #1E293B;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.18);
+    width: 100%;
+    color: #F8FAFC; 
+    box-sizing: border-box;
+}
+
+.addTransaction h3 {
+    color: #F8FAFC !important; 
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.tfom {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tfom input,
+.tfom select {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #F8FAFC;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.tfom input::placeholder {
+    color: #94A3B8;
+}
+
+.tfom input:focus,
+.tfom select:focus {
+    border-color: #6366F1; 
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.tfom select option {
+    background-color: #1E293B;
+    color: #F8FAFC;
+}
+
+.tfom button {
+    background-color: #6366F1;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 8px;
+}
+
+.tfom button:hover {
+    background-color: #4F46E5;
+}
+
+.tfom button:active {
+    transform: scale(0.98);
+}

@@ -1,4 +1,4 @@
 git init
 git add .
-git commit -m "fixed serious bug"
+git commit -m "bahut kuch badal gaya hai jindigi me"
 git push -u origin main
