@@ -4,6 +4,8 @@ FinTracker is a secure, full-stack web application designed to help users **trac
 It goes beyond traditional finance apps by integrating **Machine Learning models** and a **Large Language Model (LLM)** for personalized financial advice.
 
 ---
+## Deployed link
+https://fin-tracker-hazel.vercel.app/
 
 ## 🚀 Key Highlights
 
