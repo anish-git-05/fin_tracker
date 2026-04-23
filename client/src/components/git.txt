@@ -1,4 +1,4 @@
 git init
 git add .
-git commit -m "few things improved!"
+git commit -m "database improved!"
 git push -u origin main

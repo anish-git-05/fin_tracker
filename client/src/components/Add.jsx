@@ -5,8 +5,6 @@ import "../style/Add.css";
 function AddTransaction() {
     const [categories, setcategories] = useState([]);
 
-    // Helper function to get current local time formatted for the HTML input
-    // This ensures the default value and the 'max' limit use the user's actual timezone
     const getCurrentDateTime = () => {
         const now = new Date();
         now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -16,10 +14,9 @@ function AddTransaction() {
     const [transaction, setTransaction] = useState({
         amount: "",
         category_id: "",
-        time_details: getCurrentDateTime(), // Default to right now
+        time_details: getCurrentDateTime(),
     });
 
-    // Fetch categories when the component loads
     useEffect(() => {
         async function getData() {
             try {
@@ -47,7 +44,7 @@ function AddTransaction() {
                 body: JSON.stringify({
                     amount: transaction.amount,
                     category_id: transaction.category_id,
-                    time_details: transaction.time_details // Sending the chosen date to Flask
+                    time_details: transaction.time_details
                 })
             });
 
@@ -55,7 +52,6 @@ function AddTransaction() {
             
             if (response.ok) {
                 alert("Transaction added successfully");
-                // Reset form, keeping the current time fresh for the next entry
                 setTransaction({ 
                     amount: "", 
                     category_id: "", 
@@ -98,7 +94,6 @@ function AddTransaction() {
                     ))}
                 </select>
 
-                {/* Date & Time Picker with "Inside Right" Fake Placeholder */}
                 <div style={{ position: "relative", width: "100%", display: "flex", alignItems: "center" }}>
                     <input 
                         type="datetime-local" 
@@ -106,16 +101,15 @@ function AddTransaction() {
                         max={getCurrentDateTime()} 
                         onChange={(e) => setTransaction({ ...transaction, time_details: e.target.value })} 
                         required 
-                        style={{ width: "100%", paddingRight: "180px" }} /* Creates empty space inside the box */
+                        style={{ width: "100%", paddingRight: "180px" }}
                     />
                     
-                    {/* The Floating Placeholder Text */}
                     <span style={{ 
                         position: "absolute", 
-                        right: "40px", /* Sits right next to the calendar icon */
+                        right: "40px",
                         color: "white", 
                         fontSize: "15px", 
-                        pointerEvents: "none" /* Makes sure you can still click through it */
+                        pointerEvents: "none"
                     }}>
                         Time of transaction
                     </span>

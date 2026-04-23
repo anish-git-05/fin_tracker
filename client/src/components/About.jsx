@@ -118,7 +118,7 @@ function Footer() {
                 
                 <div className="footer-section">
                     <h4>Developed By</h4>
-                    <p>Anish | Tharun | Rudra | Ajay | Rahul | Vignan</p>
+                    <p>Anish | Tharun | Rudra | Ajay </p>
                     <p>IIT Patna Team Project</p>
                 </div>
 

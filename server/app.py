@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import psycopg2
 import psycopg2.extras
+import psycopg2.pool
 import os
 from dotenv import load_dotenv
 import pandas as pd
@@ -25,13 +26,14 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 jwt=JWTManager(app)
 
 
+db_url = os.getenv('DATABASE_URL')
+pool = psycopg2.pool.SimpleConnectionPool(
+    1, 20,
+    db_url,
+    sslmode="require" if "localhost" not in db_url and "127.0.0.1" not in db_url else None
+)
 def db():
-    db_url = os.getenv('DATABASE_URL')
-    
-    if "localhost" in db_url or "127.0.0.1" in db_url:
-        return psycopg2.connect(db_url)
-    else:
-        return psycopg2.connect(db_url, sslmode="require")
+    return pool.getconn()
 
 
 #_____________________________________________________________________________________________________________________________________#
@@ -65,7 +67,8 @@ def register():
         print("Error in database :",e)
         return jsonify({'message':'Server error.Sorry for inconvenience caused!'}),500
     finally:
-        if conn:conn.close()
+        if 'cur' in locals() and not cur.closed:cur.close()
+        if conn:pool.putconn(conn)
 
 
 
@@ -92,13 +95,18 @@ def login():
         print("Error in database :",e)
         return jsonify({'message':'Server error.Sorry for inconvenience caused!'}),500
     finally:
-        if conn:conn.close()
+        if 'cur' in locals() and not cur.closed:cur.close()
+        if conn:pool.putconn(conn)
+        
 
 @app.route('/protected',methods=['GET'])
 @jwt_required()
 def protected():
     u=get_jwt_identity()
     return jsonify({'message':f'Welcome,{u}!'}), 200
+
+
+
 
 
 
@@ -130,7 +138,35 @@ def profile():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
+
+@app.route('/delete-account', methods=['DELETE'])
+@jwt_required()
+def delete_account():
+    uid = get_jwt_identity()
+    if not uid:
+        return jsonify({'message': 'User ID is required.'}), 400
+    conn = None
+    try:
+        conn = db()
+        cur = conn.cursor()
+        
+        cur.execute("delete from transactions where user_id = %s", (uid,))
+        cur.execute("delete from users where user_id = %s", (uid,))
+        conn.commit()
+        # cur.execute("delete from users where user_id = %s", (uid,))
+        # conn.commit()
+        
+        return jsonify({'message': 'Account and all data deleted permanently.'}), 200
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        print("Delete Error:", e)
+        return jsonify({'message': 'Server error during deletion.'}), 500
+    finally:
+        if conn:
+            cur.close()
+            pool.putconn(conn)
 #____________________________________________________________________________________________________________________#
 #accounts section
 
@@ -160,7 +196,7 @@ def create_account():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 @app.route('/accounts',methods=['GET'])
 @jwt_required()
@@ -185,7 +221,7 @@ def get_account():
     finally:
         if(conn):
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 
 
@@ -216,7 +252,7 @@ def get_cat():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 
 @app.route('/categorywiseSpending',methods=['GET'])
@@ -254,7 +290,7 @@ def get_categorywise():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 
 #________________________________________________________________________________________________________#
@@ -268,13 +304,11 @@ def add_transaction():
     cid = data.get('category_id')
     kharcha = data.get('amount')
     
-    # Extract the custom time sent from React
     time_details = data.get('time_details') 
     
     if not uid or not cid or kharcha is None:
         return jsonify({'message': 'Missing required fields'}), 400
     
-    # Fallback just in case time_details isn't sent
     if not time_details:
         time_details = datetime.datetime.now()
     
@@ -283,14 +317,13 @@ def add_transaction():
         conn = db()
         cur = conn.cursor()
         
-        # Updated SQL query to insert the specific time_details
         cur.execute(
             "insert into transactions (user_id, category_id, amount, time_details) values (%s, %s, %s, %s) returning transaction_id",
             (uid, cid, kharcha, time_details)
         )
         tid = cur.fetchone()[0]
 
-        cur.execute("update accounts set balance=balance-%s where user_id=%s",(kharcha,uid))
+        # cur.execute("update accounts set balance=balance-%s where user_id=%s",(kharcha,uid))
         conn.commit()
         return jsonify({'message': 'Transaction added successfully!', 'transaction_id': tid}), 201
 
@@ -299,7 +332,7 @@ def add_transaction():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 @app.route('/gettransactions',methods=['GET'])
 @jwt_required()
@@ -334,7 +367,7 @@ def get_transactions():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 
 
@@ -376,7 +409,7 @@ def summary():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 
 #______________________________________________________________________________________________________________________________________#
@@ -425,7 +458,7 @@ def predict():
 
 
         if len(df) >= 10:
-            iso_model = IsolationForest(contamination=0.15, random_state=10)
+            iso_model = IsolationForest(contamination=0.05, random_state=10)
             df['flag'] = iso_model.fit_predict(df[['amount']])
             dff = df[df['flag'] == 1]  #-1 means anomaly
         else:
@@ -528,7 +561,7 @@ def predict():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 
 @app.route('/predict/anomalies', methods=['GET'])
@@ -556,7 +589,7 @@ def get_anomalies():
             }), 200
         df = pd.DataFrame(rows, columns=['id', 'amount', 'cat_name', 'date', 'cat_id'])
         df['amount'] = pd.to_numeric(df['amount'], downcast='float')
-        model = IsolationForest(contamination=0.15, random_state=10)    
+        model = IsolationForest(contamination=0.10, random_state=10)    
         df['anomaly'] = model.fit_predict(df[['amount', 'cat_id']])
         anomalies_df = df[df['anomaly'] == -1]
 
@@ -579,7 +612,7 @@ def get_anomalies():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 
 
@@ -643,7 +676,7 @@ def chat():
     finally:
         if conn:
             cur.close()
-            conn.close()
+            pool.putconn(conn)
 
 
 

@@ -38,6 +38,7 @@ def setup_db():
         for i,j in categories:
             cur.execute("insert into categories (name,is_essential) values (%s,%s) on conflict (name) do nothing",(i,j))
         cur.execute("create index idx_transactions_user_id on transactions using Btree(user_id)")
+        cur.execute("create index if not exists idx_transactions_time on transactions using btree(time_details desc)")
         conn.commit()
         cur.close()
         conn.close()
