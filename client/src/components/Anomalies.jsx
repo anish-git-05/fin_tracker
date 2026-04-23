@@ -35,7 +35,7 @@ function Anomalies() {
         <div className="anomalies-card">
             <div className="anomalies-header">
                 <span className="anomalies-icon">⚠️</span>
-                <h3 className="anomalies-title">AI Anomaly Detection</h3>
+                <h3 className="anomalies-title">Anomaly Detection</h3>
             </div>
             <p className="anomalies-subtitle">Our ML models flagged these unusual expenses:</p>
             

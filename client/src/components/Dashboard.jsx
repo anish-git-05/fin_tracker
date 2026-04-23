@@ -8,7 +8,7 @@ import Predict from "./Predict";
 import Anomalies from "./Anomalies";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
-
+const month=new Date().toLocaleString('default',{month:'long'})
 function authfetch(url) {
     const token = localStorage.getItem("token");
     return fetch(url, {
@@ -42,7 +42,7 @@ function SummaryCard() {
     }
     return (
         <div className="summaryCard">
-            <h3>Monthly Spending Insights 📊</h3>
+            <h3>Monthly Spending Insights ({month}) 📊</h3>
             <div className="grid">
                 <div className="box">
                     <p>Total Spent: Rs {sumExpenses.toFixed(2)}</p>

@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import IsolationForest
+from sklearn.metrics import r2_score
 import datetime
 import calendar
 from datetime import timedelta
@@ -262,21 +263,32 @@ def get_categorywise():
 @app.route('/addtransactions',methods=['POST'])
 @jwt_required()
 def add_transaction():
-    data=request.get_json()
+    data = request.get_json()
     uid = get_jwt_identity()
-    # aid=data.get('account_id')
-    cid=data.get('category_id')
-    kharcha=data.get('amount')
+    cid = data.get('category_id')
+    kharcha = data.get('amount')
     
-    if not uid  or not cid or kharcha is None:
+    # Extract the custom time sent from React
+    time_details = data.get('time_details') 
+    
+    if not uid or not cid or kharcha is None:
         return jsonify({'message': 'Missing required fields'}), 400
+    
+    # Fallback just in case time_details isn't sent
+    if not time_details:
+        time_details = datetime.datetime.now()
     
     conn=None
     try:
         conn = db()
         cur = conn.cursor()
-        cur.execute("insert into transactions (user_id,category_id,amount) values (%s,%s,%s) returning transaction_id",(uid,cid,kharcha))
-        tid=cur.fetchone()[0]
+        
+        # Updated SQL query to insert the specific time_details
+        cur.execute(
+            "insert into transactions (user_id, category_id, amount, time_details) values (%s, %s, %s, %s) returning transaction_id",
+            (uid, cid, kharcha, time_details)
+        )
+        tid = cur.fetchone()[0]
 
         cur.execute("update accounts set balance=balance-%s where user_id=%s",(kharcha,uid))
         conn.commit()
@@ -288,7 +300,6 @@ def add_transaction():
         if conn:
             cur.close()
             conn.close()
-
 
 @app.route('/gettransactions',methods=['GET'])
 @jwt_required()
@@ -413,12 +424,12 @@ def predict():
         totalamount = float(daily['psum'].iloc[-1])
 
 
-        Q1 = df['amount'].quantile(0.25)
-        Q3 = df['amount'].quantile(0.75)
-        IQR = Q3 - Q1
-        upper_bound = Q3 + 1.5 * IQR  # anything above this will be anomaly
-        
-        dff = df[df['amount'] <= upper_bound]
+        if len(df) >= 10:
+            iso_model = IsolationForest(contamination=0.15, random_state=10)
+            df['flag'] = iso_model.fit_predict(df[['amount']])
+            dff = df[df['flag'] == 1]  #-1 means anomaly
+        else:
+            dff = df
         
         if dff['day'].nunique() < 2:
             dff = df
@@ -444,7 +455,8 @@ def predict():
         
         daily_rate=model.coef_[0]   # daily rate is the rate of spending without considering anomalies
         rem=days-day
-        predicted_total=totalamount+(daily_rate*rem)
+        predicted_total=totalamount+(daily_rate*rem) #imp
+
 
         chart_data = []
         for d, s in zip(daily['day'].values, daily['psum'].values):
@@ -459,7 +471,7 @@ def predict():
             "forecast": float(predicted_total)
         })
 
-        #AI insights###
+        #AI insights#
         try:
             cur.execute("""
                 select c.name, sum(t.amount) as cat_total
@@ -491,7 +503,7 @@ def predict():
             - Keep the tone simple, professional, and easy to read.
             """
             
-            # Uncomment when ready to use actual Gemini API(limited acces hi hai isiliye soch samajh ke use krna)
+            # Uncomment below 2 lines when ready to use actual Gemini API(limited acces hi hai isiliye soch samajh ke use krna)
             # ai_response = ai_model.generate_content(prompt)
             # ai_insight = ai_response.text.strip()
             ai_insight = "Our AI Analyst is currently busy. Please check back later!"
@@ -517,6 +529,58 @@ def predict():
         if conn:
             cur.close()
             conn.close()
+
+
+@app.route('/predict/anomalies', methods=['GET'])
+@jwt_required()
+def get_anomalies():
+    uid = get_jwt_identity()
+    if not uid:
+        return jsonify({'message': 'Please login to continue.'}), 400
+    conn = None
+    try:
+        conn = db()
+        cur = conn.cursor()
+        cur.execute("""
+            select t.transaction_id, t.amount, c.name, t.time_details, t.category_id
+            from transactions t
+            join categories c ON t.category_id = c.category_id
+            where t.user_id = %s
+            order by t.time_details desc;
+        """, (uid,))
+        rows = cur.fetchall()
+        if len(rows) < 10:
+            return jsonify({
+                "message": "Not enough data. Need at least 10 transactions to detect anomalies.", 
+                "anomalies": []
+            }), 200
+        df = pd.DataFrame(rows, columns=['id', 'amount', 'cat_name', 'date', 'cat_id'])
+        df['amount'] = pd.to_numeric(df['amount'], downcast='float')
+        model = IsolationForest(contamination=0.15, random_state=10)    
+        df['anomaly'] = model.fit_predict(df[['amount', 'cat_id']])
+        anomalies_df = df[df['anomaly'] == -1]
+
+        anomaly_list = []
+        for _, row in anomalies_df.iterrows():
+            anomaly_list.append({
+                "transaction_id": row['id'],
+                "amount": float(row['amount']),
+                "category_name": row['cat_name'],
+                "date": row['date'].strftime("%b %d, %Y"),
+            })
+
+        return jsonify({
+            "message": "Anomaly check complete.", 
+            "anomalies": anomaly_list
+        }), 200
+    except Exception as e:
+        print("Anomaly ML Error:", e)
+        return jsonify({'message': str(e)}), 500
+    finally:
+        if conn:
+            cur.close()
+            conn.close()
+
 
 
 @app.route('/chat', methods=['POST'])
@@ -570,7 +634,7 @@ def chat():
             reply = ai_response.text.strip()
         except Exception as api_error:
             print(f"Gemini API Limit Hit: {api_error}")
-            reply = "I'm analyzing a lot of data right now and my circuits are a bit busy! But looking at your profile, your total spend is ₹" + str(total_spent) + "."
+            reply = "I'm analyzing a lot of data right now and my circuits are a bit busy! But looking at your profile, your total spend is ₹" + str(total) + "."
 
         return jsonify({'reply': reply}), 200
     except Exception as e:
@@ -581,55 +645,6 @@ def chat():
             cur.close()
             conn.close()
 
-@app.route('/predict/anomalies', methods=['GET'])
-@jwt_required()
-def get_anomalies():
-    uid = get_jwt_identity()
-    if not uid:
-        return jsonify({'message': 'Please login to continue.'}), 400
-    conn = None
-    try:
-        conn = db()
-        cur = conn.cursor()
-        cur.execute("""
-            select t.transaction_id, t.amount, c.name, t.time_details, t.category_id
-            from transactions t
-            join categories c ON t.category_id = c.category_id
-            where t.user_id = %s
-            order by t.time_details desc;
-        """, (uid,))
-        rows = cur.fetchall()
-        if len(rows) < 10:
-            return jsonify({
-                "message": "Not enough data. Need at least 10 transactions to detect anomalies.", 
-                "anomalies": []
-            }), 200
-        df = pd.DataFrame(rows, columns=['id', 'amount', 'cat_name', 'date', 'cat_id'])
-        df['amount'] = pd.to_numeric(df['amount'], downcast='float')
-        model = IsolationForest(contamination=0.05, random_state=10)    
-        df['anomaly'] = model.fit_predict(df[['amount', 'cat_id']])
-        anomalies_df = df[df['anomaly'] == -1]
-
-        anomaly_list = []
-        for _, row in anomalies_df.iterrows():
-            anomaly_list.append({
-                "transaction_id": row['id'],
-                "amount": float(row['amount']),
-                "category_name": row['cat_name'],
-                "date": row['date'].strftime("%b %d, %Y"),
-            })
-
-        return jsonify({
-            "message": "Anomaly check complete.", 
-            "anomalies": anomaly_list
-        }), 200
-    except Exception as e:
-        print("Anomaly ML Error:", e)
-        return jsonify({'message': str(e)}), 500
-    finally:
-        if conn:
-            cur.close()
-            conn.close()
 
 
 if __name__=="__main__":

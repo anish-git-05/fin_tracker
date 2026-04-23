@@ -28,7 +28,7 @@ ChartJS.register(
 );
 
 ChartJS.defaults.color = "#a0aabf"; 
-
+const month=new Date().toLocaleString('default',{month:'long'})
 function authfetch(url) {
     const token = localStorage.getItem("token");
     return fetch(url, {
@@ -50,12 +50,12 @@ function ExpenseLineChart() {
     }, []);
     
     let dayWiseExpenses = [];
-    for (let i = 0; i < dataind.length; i++) {
-        dayWiseExpenses.push(dataind[i].total);
-    }
     let n = dataind.length;
-    for (let i = 1; i <= n; i++) {
-        labels.push(i.toString());
+    for (let i = 0; i < n; i++) {
+        dayWiseExpenses.push(dataind[i].total);
+        let dateString = dataind[i].spend_date; 
+        let dayNumber = parseInt(dateString.split("-")[2]); 
+        labels.push(dayNumber.toString());
     }
     let datapoints = [];
     if (dataind.length) {
@@ -84,11 +84,17 @@ function ExpenseLineChart() {
         maintainAspectRatio: false, 
         plugins: {
             legend: { position: "top" },
-            title: { display: true, text: "Cumulative Expenses for the Month", color: "#ffffff", font: { size: 16 } }
+            title: { display: true, text: `Cumulative Expenses for the Month (${month})`, color: "#ffffff", font: { size: 16 } }
         },
         scales: {
-            x: { grid: { color: "rgba(255, 255, 255, 0.05)" } },
-            y: { grid: { color: "rgba(255, 255, 255, 0.05)" } }
+            x: { 
+                grid: { color: "rgba(255, 255, 255, 0.05)" },
+                title: { display: true, text: "Day of the Month", color: "#a0aabf" } 
+            },
+            y: { 
+                grid: { color: "rgba(255, 255, 255, 0.05)" },
+                title: { display: true, text: "Amount (₹)", color: "#a0aabf" }   
+            }
         }
     }
     
@@ -109,13 +115,14 @@ function BarChart() {
     }, []);
     
     let dayWiseExpenses = [];
-    for (let i = 0; i < dataind.length; i++) {
-        dayWiseExpenses.push(dataind[i].total);
-    }
     let n = dataind.length;
-    for (let i = 1; i <= n; i++) {
-        labels.push(i.toString());
+    for (let i = 0; i < n; i++) {
+        dayWiseExpenses.push(dataind[i].total);
+        let dateString = dataind[i].spend_date; 
+        let dayNumber = parseInt(dateString.split("-")[2]); 
+        labels.push(dayNumber.toString());
     }
+    
     
     const barData = {
         labels: labels,
@@ -132,11 +139,17 @@ function BarChart() {
         maintainAspectRatio: false,
         plugins: {
             legend: { position: "top" },
-            title: { display: true, text: "Daily Expenses for the Month", color: "#ffffff", font: { size: 16 } }
+            title: { display: true, text: `Daily Expenses for the Month (${month})`, color: "#ffffff", font: { size: 16 } }
         },
         scales: {
-            x: { grid: { display: false } }, 
-            y: { grid: { color: "rgba(255, 255, 255, 0.05)" } }
+            x: { 
+                grid: { color: "rgba(255, 255, 255, 0.05)" },
+                title: { display: true, text: "Day of the Month", color: "#a0aabf" } 
+            },
+            y: { 
+                grid: { color: "rgba(255, 255, 255, 0.05)" },
+                title: { display: true, text: "Amount (₹)", color: "#a0aabf" }
+            }
         }
     }
     
@@ -190,7 +203,7 @@ function CategoryChart() {
         maintainAspectRatio: false, 
         plugins: {
             legend: { position: "bottom" },
-            title: { display: true, text: "Top 5 Categories", color: "#ffffff", font: { size: 16 } }
+            title: { display: true, text: `Top 5 Categories(based on your spendings) (${month})`, color: "#ffffff", font: { size: 16 } }
         }
     }
     
