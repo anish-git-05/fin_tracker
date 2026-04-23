@@ -37,6 +37,7 @@ def setup_db():
         cur.execute("create table if not exists transactions(transaction_id serial primary key,user_id int,account_id int,category_id int,amount decimal(15,2),time_details timestamp default current_timestamp,foreign key(user_id) references users(user_id),foreign key(account_id) references accounts(account_id),foreign key(category_id) references categories(category_id))")
         for i,j in categories:
             cur.execute("insert into categories (name,is_essential) values (%s,%s) on conflict (name) do nothing",(i,j))
+        cur.execute("create index idx_transactions_user_id on transactions using Btree(user_id)")
         conn.commit()
         cur.close()
         conn.close()
