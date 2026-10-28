@@ -2,11 +2,16 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+
 import psycopg2
 import psycopg2.extras
 import psycopg2.pool
 import os
+
 from dotenv import load_dotenv
+
+load_dotenv()
+
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import IsolationForest
@@ -15,8 +20,8 @@ import datetime
 import calendar
 from datetime import timedelta
 import google.generativeai as genai
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 load_dotenv()
 app=Flask(__name__)
